@@ -243,7 +243,7 @@ export enum TokenType {
     /**
      * ^= 异或赋值
      */
-    AssignXor = 76,
+    AssignBitwiseXor = 76,
 
     /**
      * |= 按位或赋值
@@ -515,6 +515,26 @@ export enum TokenType {
      * of 关键字
      */
     Of = 148,
+
+    /**
+     * async 关键字
+     */
+    Async = 149,
+
+    /**
+     * await 关键字
+     */
+    Await = 150,
+
+    /**
+     * void 关键字
+     */
+    Void = 151,
+
+    /**
+     * NaN 关键字
+     */
+    NaN = 152,
 
     /**
      * 字符串

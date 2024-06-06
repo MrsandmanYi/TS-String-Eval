@@ -5,8 +5,9 @@ import { CommandType } from "../../command/CommandType";
 import { CodeContext } from "../../context/CodeContext";
 import { ForContext, ForInContext, ForSimpleContext } from "../../context/ForContext";
 import { TokenType } from "../TokenType";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { StatementBlockParser } from "./StatementBlockParser";
-import { ParserResult, SubParser } from "./SubParser";
+import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 /**
  * 循环解析器, 用于解析 for 语句
@@ -127,6 +128,15 @@ class ForSubParser extends SubParser {
         forInContext.cmdBlock = forInCmdBlock;
 
         this._cmdBlock?.addCommand(new Command(CommandType.ForIn_CMD, forInContext, this.peekToken()));
+    }
+
+    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+        let parseResult = new ParserResult();
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "getCompoundCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
     }
     
 }

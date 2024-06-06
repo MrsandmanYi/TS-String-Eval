@@ -6,8 +6,9 @@ import { FunctionContext, FunctionType } from '../../context/FunctionContext';
 import { InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext } from "../../context/MemberContext";
 import { TokenType } from "../TokenType";
+import { CodeContextParser } from "./CodeContextParser";
 import { InvokeFunctionParser } from "./InvokeFunctionParser";
-import { StatementParser } from "./StatementParser";
+import { StatementBlockParser } from "./StatementBlockParser";
 import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 
@@ -118,7 +119,7 @@ export class FunctionSubParser extends SubParser {
         }
 
         let cmdBlock : CmdBlock = new CmdBlock(CmdBlockType.Function);
-        StatementParser.parse(cmdBlock, out);
+        StatementBlockParser.parse(cmdBlock, out, {readLeftBrace: true, endTokenType: TokenType.RightBrace});
 
         let functionContext:FunctionContext = 
             new FunctionContext(name, this.isStatic, params, types, values, hasDynamicParams, cmdBlock, this.peekToken());
@@ -131,8 +132,17 @@ export class FunctionSubParser extends SubParser {
             functionContext.autoTriggerParams = invokeContext.args || [];
             functionContext.autoTrigger = true;
         }
-        
-        out.codeContexts = [functionContext];
+
+        out.setCodeContext(functionContext);
+    }
+
+    private getCodeContext(): CodeContext {
+        let parseResult = new ParserResult();
+        CodeContextParser.parse(this.cmdBlock, parseResult);
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "FunctionParser getCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
     }
 
 }

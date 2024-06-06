@@ -21,7 +21,7 @@ export class MemberContext extends CodeContext{
 
     public readonly value : string | CodeContext | number | Function;
 
-    public readonly mutator: MemberMutator;
+    public mutator: MemberMutator;
 
     constructor(
         parent: MemberContext | null, 

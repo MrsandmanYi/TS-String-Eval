@@ -1,6 +1,8 @@
 import { ArrayContext } from "../../context/ArrayContext";
+import { CodeContext } from "../../context/CodeContext";
 import { TokenType } from "../TokenType";
-import { ParserResult, SubParser } from "./SubParser";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
+import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 /**
  * 数组解析器
@@ -31,6 +33,15 @@ class ArraySubParser extends SubParser {
         }
         this.readExpectedToken(TokenType.RightBracket);
         out.setCodeContext(arrayContext);
+    }
+
+    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+        let parseResult = new ParserResult();
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "getCompoundCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
     }
 }
 

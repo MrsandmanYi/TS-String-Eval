@@ -2,11 +2,13 @@ import { CmdBlock } from "../../command/CmdBlock";
 import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { CommandType } from "../../command/CommandType";
+import { CodeContext } from "../../context/CodeContext";
 import { SwitchContext } from "../../context/SwitchContext";
 import { TokenType } from "../TokenType";
 import { CaseBlock } from "../base/ConditionBlock";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { StatementBlockParser } from "./StatementBlockParser";
-import { ParserResult, SubParser } from "./SubParser";
+import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 class SwitchSubParser extends SubParser {
 
@@ -62,6 +64,14 @@ class SwitchSubParser extends SubParser {
         }
     }
 
+    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+        let parseResult = new ParserResult();
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "getCompoundCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
+    }
 }
 
 export const SwitchParser = new SwitchSubParser();

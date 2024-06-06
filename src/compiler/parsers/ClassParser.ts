@@ -14,14 +14,6 @@ import { ParserResult, SubParser } from "./SubParser";
  */
 class ClassSubParser extends SubParser {
 
-    public classMap: Map<string, ClassContext> = new Map<string, ClassContext>();
-
-    /**
-     * 清空类映射, 用于多次解析
-     */
-    public clear() {
-        this.classMap.clear();
-    }
 
     protected parseCore(out: ParserResult): void {
         
@@ -36,10 +28,10 @@ class ClassSubParser extends SubParser {
         classContext.isExport = isExport;
         classContext.isAbstract = isAbstract;
 
-        if (this.classMap.has(classContext.className)) {
-            throw new Error(`类 ${classContext.className} 已经存在`);
-        }
-        this.classMap.set(classContext.className, classContext);
+        // if (SyntaxParser.classMap.has(classContext.className)) {
+        //     throw new Error(`类 ${classContext.className} 已经存在`);
+        // }
+        // SyntaxParser.classMap.set(classContext.className, classContext);
 
         // 读取父类
         let parentClassName = this.readParentClass();

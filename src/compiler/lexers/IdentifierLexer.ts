@@ -137,6 +137,12 @@ export class IdentifierLexer extends SubLexer {
                 case "default":
                     tokenType = TokenType.Default;
                     break;
+                case "void":
+                    tokenType = TokenType.Void;
+                    break;
+                case "NaN":
+                    tokenType = TokenType.NaN;
+                    break;
                 default:
                     break;
             }

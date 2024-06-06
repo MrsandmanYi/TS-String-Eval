@@ -1,11 +1,13 @@
 import { ClassContext } from "../../context/ClassContext";
-import { AccessModifier } from "../../context/CodeContext";
+import { AccessModifier, CodeContext } from "../../context/CodeContext";
 import { FunctionContext } from '../../context/FunctionContext';
 import { VariableContext } from "../../context/VariableContext";
 import { TokenType } from "../TokenType";
+import { CodeContextParser } from "./CodeContextParser";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { FunctionParser } from "./FunctionParser";
 import { NewParser } from "./NewParser";
-import { CodeItemType, ParserResult, SubParser } from "./SubParser";
+import { CodeItemType, ParserError, ParserResult, SubParser } from "./SubParser";
 
 /**
  * 类成员解析器
@@ -104,6 +106,24 @@ class MembersSubParser extends SubParser {
         }
         out.setCodeContext(this.classContext);
         this.readExpectedToken(TokenType.RightBrace);
+    }
+
+    private getCodeContext(itemType : CodeItemType = CodeItemType.Object): CodeContext {
+        let parseResult = new ParserResult();
+        CodeContextParser.parse(this.cmdBlock, parseResult, {codeType : itemType});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "MembersSubParser getCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
+    }
+
+    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+        let parseResult = new ParserResult();
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "MembersSubParser getCompoundCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
     }
 
 }

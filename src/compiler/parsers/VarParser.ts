@@ -32,7 +32,7 @@ class VarSubParser extends SubParser {
             if (peekToken?.tokenType == TokenType.Assign) {
                 this.backToken();
                 this.backToken();
-                if (this.peekToken()?.tokenType == TokenType.Colon) {
+                if (this.peekToken().tokenType == TokenType.Colon) {
                     this.backToken();
                 }
                 else {
@@ -44,7 +44,7 @@ class VarSubParser extends SubParser {
             }
 
             // 处理有逗号的情况
-            peekToken = this.peekToken();
+            peekToken = this.readToken();
             if (peekToken?.tokenType != TokenType.Comma) {
                 this.backToken();
                 break;

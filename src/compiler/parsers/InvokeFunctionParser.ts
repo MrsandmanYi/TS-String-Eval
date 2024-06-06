@@ -1,7 +1,9 @@
+import { CodeContext } from "../../context/CodeContext";
 import { InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext } from "../../context/MemberContext";
 import { TokenType } from "../TokenType";
-import { ParserResult, SubParser } from "./SubParser";
+import { CodeContextParser } from "./CodeContextParser";
+import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 /**
  * 语法解析器: 函数调用
@@ -19,18 +21,18 @@ class InvokeFunctionSubParser extends SubParser {
 
         let funcParams : MemberContext[] = [];      // 函数参数列表
         let token = this.peekToken();
-        while (token?.tokenType != TokenType.RightParen) {
+        while (token.tokenType != TokenType.RightParen) {
             let member = this.getCodeContext();
             funcParams.push(member as MemberContext);
             token = this.peekToken();
-            if (token?.tokenType == TokenType.Comma) {
+            if (token.tokenType == TokenType.Comma) {
                 this.readToken();
             }
-            else if(token?.tokenType != TokenType.RightParen) {
+            else if(token.tokenType == TokenType.RightParen) {
                 break;
             }
             else {
-                throw new Error("InvokeFunctionParser: 函数调用参数解析错误");
+                throw new ParserError(token, "InvokeFunctionParser: 函数调用参数解析错误");
             }
         }
         this.readExpectedToken(TokenType.RightParen); // 读取右括号 ) ,参数列表结束
@@ -39,6 +41,16 @@ class InvokeFunctionSubParser extends SubParser {
 
         out.codeContexts = [context];
     }
+
+    private getCodeContext(): CodeContext {
+        let parseResult = new ParserResult();
+        CodeContextParser.parse(this.cmdBlock, parseResult);
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "FunctionParser getCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
+    }
+
 
 }
 

@@ -1,9 +1,11 @@
 import { Command } from "../../command/Command";
 import { CommandType } from "../../command/CommandType";
 import { AssignContext } from "../../context/AssignContext";
+import { CodeContext } from "../../context/CodeContext";
 import { InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext, MemberMutator } from "../../context/MemberContext";
 import { OperatorContext } from "../../context/OperatorContext";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 class ExpressionSubParser extends SubParser {
@@ -37,6 +39,15 @@ class ExpressionSubParser extends SubParser {
         else {
             throw new ParserError(token, "不支持的表达式" + token.tokenText);
         }
+    }
+
+    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+        let parseResult = new ParserResult();
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        if (!parseResult.codeContext) {
+            throw new ParserError(null, "getCompoundCodeContext 无法获取 codeContext");
+        }
+        return parseResult.codeContext;
     }
 
 }

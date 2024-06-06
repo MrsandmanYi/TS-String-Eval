@@ -212,7 +212,7 @@ export class OperatorLexer extends SubLexer{
                 out.line = lineIndex;
                 out.startColumn = columnIndex;
                 out.endColumn = columnIndex + 1;
-                out.tokens = [new Token(TokenType.AssignXor, out.text, out.line, out.startColumn, out.endColumn)];
+                out.tokens = [new Token(TokenType.AssignBitwiseXor, out.text, out.line, out.startColumn, out.endColumn)];
                 return true;
             }
             else{

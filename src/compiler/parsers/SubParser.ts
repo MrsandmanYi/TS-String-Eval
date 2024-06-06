@@ -1,9 +1,11 @@
 import { CmdBlock } from "../../command/CmdBlock";
 import { CodeContext } from "../../context/CodeContext";
-import { MemberContext, MemberMutator } from "../../context/MemberContext";
+import { Logger } from "../../utils/Logger";
+import { ENV_EDITOR } from "../../utils/Marco";
 import { SyntaxParser } from "../SyntaxParser";
 import { Token } from "../Token";
 import { TokenType } from "../TokenType";
+
 
 export class ParserResult {
     tokenStartIndex: number = -1; // 解析开始时的 token 索引
@@ -94,7 +96,16 @@ export abstract class SubParser {
         this._cmdBlock = cmdBlock;
         this._params = params;
         out.tokenStartIndex = SyntaxParser.tokenIndex;
+
+        if (ENV_EDITOR) {
+            Logger.log("开始解析.... " + this.constructor.name, this.peekToken());
+        }
+
         this.parseCore(out);
+
+        if (ENV_EDITOR) {
+            //Logger.log("....解析完成 " + this.constructor.name, out.codeContext);
+        }
     }
 
     protected abstract parseCore(out : ParserResult) : void;
@@ -179,65 +190,7 @@ export abstract class SubParser {
 
     //#region 获取CodeContext辅助方法
 
-    /**
-     * 获取复合类型上下文, 用于解析复合语句
-     * @param checkColon 是否检查冒号, 默认为 true, 如：case 语句块不需要检查冒号
-     */
-    protected getCompoundCodeContext(checkColon: boolean = true) : CodeContext | null {
-        
-        
-
-        return null;
-    }
-
-    /**
-     * 获取代码上下文, 用于解析单行语句，如果发现是复合语句则会调用 getCompoundCodeContext 方法
-     */
-    protected getCodeContext(codeType : CodeItemType = CodeItemType.Object) : CodeContext | null {
-        let codeContext : CodeContext | null = null;
-        let token = this.readToken();
-
-        let preTokenType = token?.tokenType;
-        if(preTokenType == TokenType.NotNot){   // !!
-            token = this.readToken();
-        }
-        else if(preTokenType == TokenType.Increment){   // ++
-            token = this.readToken();
-        }
-        else if(preTokenType == TokenType.Decrement){   // --
-            token = this.readToken();
-        }
-
-        if(!token) throw new ParserError(null, "getCodeContext 无法获取 token");
-
-        switch (token.tokenType) {
-            case TokenType.Identifier:  
-                codeContext = new MemberContext(null, token.tokenText, MemberMutator.None, token);
-                break;
-            case TokenType.LeftParen: // ( ， ()=>void , ():void =>{}
-                if (codeType == CodeItemType.Object) {
-                    codeContext = this.getCompoundCodeContext();
-                }
-                else{
-                    // ()=>void, 直接返回 Function
-                    let token = this.peekToken();
-                    while(token?.tokenType != TokenType.Assign){
-                        token = this.readToken();
-                    }
-                    token = this.readExpectedToken(TokenType.Greater);
-                    codeContext = new MemberContext(null, Function, MemberMutator.None, token);
-                }
-                break;
-            case TokenType.Function: // function
-                //codeContext = 
-                break;
-            default:
-                //codeContext = new CodeContext(token);
-                break;
-        }
-
-        return null;
-    }
+    
 
     //#endregion
 

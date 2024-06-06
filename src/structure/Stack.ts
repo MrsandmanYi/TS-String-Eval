@@ -13,11 +13,15 @@ export class Stack<T> {
         this._data.push(value);
     }
 
-    public pop(): T | undefined {
-        return this._data.pop();
+    public pop(): T {
+        let e = this._data.pop();
+        if (e == null) {
+            throw new Error("Stack: 栈为空, 无法 pop");
+        }
+        return e;
     }
 
-    public peek(): T | undefined {
+    public peek(): T {
         return this._data[this._data.length - 1];
     }
 

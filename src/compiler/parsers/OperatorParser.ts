@@ -60,6 +60,7 @@ class OperatorSubParser extends SubParser {
         }
         let currentOperator = OperatorPriorityMap.get(token.tokenType);
         if (!currentOperator) {
+            out.codeContexts = [];
             return;
         }
 
