@@ -1,0 +1,45 @@
+import { CmdBlock } from '../command/CmdBlock';
+import { Token } from '../compiler/Token';
+import { CodeContext } from "./CodeContext";
+import { MemberContext } from "./MemberContext";
+
+export enum FunctionType {
+    Normal,
+    Getter,
+    Setter,
+    //Constructor
+}
+
+/**
+ * 函数上下文
+ */
+export class FunctionContext extends CodeContext {
+    
+    public readonly params: string[];
+    public readonly types: Array<MemberContext|undefined>;
+    public readonly values: Array<CodeContext|undefined>;
+
+    public readonly name: string;
+    public readonly isStatic: boolean;
+
+    public readonly hasDynamicParams: boolean;
+
+    public readonly cmdBlock: CmdBlock;
+
+    public autoTrigger: boolean = false;
+
+    public autoTriggerParams: Array<CodeContext|undefined> = [];
+
+    public constructor(name: string, isStatic: boolean, params: string[], types: Array<MemberContext|undefined>,
+         values: Array<CodeContext|undefined>, hasDynamicParams: boolean, cmdBlock: CmdBlock, token: Token | null = null) {
+        super(token);
+        this.name = name;
+        this.isStatic = isStatic;
+        this.params = params;
+        this.types = types;
+        this.values = values;
+        this.hasDynamicParams = hasDynamicParams;
+        this.cmdBlock = cmdBlock;
+    }
+
+}

@@ -16,7 +16,7 @@ export enum TokenType {
     /**
      * var/let 声明可变变量
      */
-    Let = 2,
+    Var = 2,
 
     /**
      * const 声明不可变变量
@@ -507,6 +507,16 @@ export enum TokenType {
     IS = 146,
 
     /**
+     * else if 关键字
+     */
+    ElseIf = 147,
+
+    /**
+     * of 关键字
+     */
+    Of = 148,
+
+    /**
      * 字符串
      */
     String = 200,
@@ -515,4 +525,14 @@ export enum TokenType {
      * 数字
      */
     Number = 210,
+
+    /**
+     * - 负数
+     */
+    Negative = 211,
+
+    /**
+     * + 正数
+     */
+    Positive = 212,
 }
