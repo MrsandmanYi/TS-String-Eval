@@ -44,7 +44,7 @@ export class SyntaxParser {
         }
 
         SyntaxParser.classMap.forEach((value, key) => {
-            console.log(`类名: ${key}`);
+            console.log(`类名: ${key}`, value);
             if (value.parentClassName) {
                 let parentClass = SyntaxParser.classMap.get(value.parentClassName);
                 if (parentClass) {
@@ -55,6 +55,7 @@ export class SyntaxParser {
                     console.error(`父类 ${value.parentClassName} 不存在`);
                 }
             }
+            value.print();
         });
     }
 

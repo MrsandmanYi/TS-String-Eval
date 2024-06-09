@@ -32,4 +32,17 @@ export class CmdBlock {
         this._commands.push(command);
     }
 
+    public print(): void {
+        if (this.parent) {
+            this.parent.print();
+        }
+
+        console.log("   -->CmdBlock: " + CmdBlockType[this.blockType]);
+        for (let i = 0; i < this.commands.length; i++) {
+            this.commands[i].print();
+        }
+        console.log("   -->CmdBlock End: " + CmdBlockType[this.blockType]);
+
+    }
+
 }

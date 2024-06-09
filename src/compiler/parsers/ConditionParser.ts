@@ -1,6 +1,6 @@
 import { CodeContext } from "../../context/CodeContext";
 import { TokenType } from "../TokenType";
-import { CodeContextParser } from "./CodeContextParser";
+import { CompoundCodeContextParser } from './CompoundCodeContextParser';
 import { StatementBlockParser } from "./StatementBlockParser";
 import { ParserResult, SubParser } from "./SubParser";
 
@@ -21,7 +21,7 @@ class ConditionSubParser extends SubParser {
             // 有()的情况
             this.readExpectedToken(TokenType.LeftParen);
             let parseResult = new ParserResult();
-            CodeContextParser.parse(this.cmdBlock, parseResult);
+            CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
             codeContext = parseResult.codeContext;
             this.readExpectedToken(TokenType.RightParen);
         }

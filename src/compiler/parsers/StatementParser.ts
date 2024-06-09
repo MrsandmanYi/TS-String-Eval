@@ -63,8 +63,8 @@ class StatementSubParser extends SubParser {
                 ReturnParser.parse(this.cmdBlock, parseResult);
                 break;
             case TokenType.Identifier:  // 变量赋值 var a = 1;
-            case TokenType.Increment:   // 变量自增 a++;
-            case TokenType.Decrement:   // 变量自减 b--;
+            case TokenType.Increment:   // 变量自增 ++a;
+            case TokenType.Decrement:   // 变量自减 --b;
                 ExpressionParser.parse(this.cmdBlock, parseResult);
                 break;
             case TokenType.New:

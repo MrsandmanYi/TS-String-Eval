@@ -67,7 +67,7 @@ class ForSubParser extends SubParser {
             this.readExpectedToken(TokenType.Semicolon);            
         }
         token = this.readToken();
-        if (token?.tokenType != TokenType.RightParen) {
+        if (token.tokenType != TokenType.RightParen) {
             this.backToken();
             let loopBlock = new CmdBlock(CmdBlockType.ForLoop, this._cmdBlock);
             StatementBlockParser.parse(loopBlock, out, { readLeftBrace: false, endTokenType: TokenType.RightParen });
@@ -75,7 +75,7 @@ class ForSubParser extends SubParser {
         }
         // 解析for语句块
         let forCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.For, this._cmdBlock);
-        StatementBlockParser.parse(forCmdBlock,out);
+        StatementBlockParser.parse(forCmdBlock,out, { readLeftBrace: true, endTokenType: TokenType.RightBrace });
         forContext.setCmdBlock(forCmdBlock);
 
         this._cmdBlock?.addCommand(new Command(CommandType.For_CMD, forContext, this.peekToken()));
@@ -100,7 +100,7 @@ class ForSubParser extends SubParser {
         }
 
         this.readExpectedToken(TokenType.RightParen);
-        StatementBlockParser.parse(forSimCmdBlock,out);
+        StatementBlockParser.parse(forSimCmdBlock,out, { readLeftBrace: true, endTokenType: TokenType.RightBrace });
         forSimContext.setCmdBlock(forSimCmdBlock);
 
         this._cmdBlock?.addCommand(new Command(CommandType.ForSimple_CMD, forSimContext, this.peekToken()));

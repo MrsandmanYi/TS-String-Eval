@@ -42,4 +42,12 @@ export class FunctionContext extends CodeContext {
         this.cmdBlock = cmdBlock;
     }
 
+    public print() {
+        console.log("--FunctionName: " + this.name);
+        console.log("----Params: " + this.params.join(", "));
+        console.log("----HasDynamicParams: " + this.hasDynamicParams);
+
+        this.cmdBlock.print();
+    }
+
 }

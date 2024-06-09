@@ -8,10 +8,16 @@ import { ParserResult, SubParser } from "./SubParser";
 class StatementBlockSubParser extends SubParser
 {
     protected get readLeftBrace() : boolean {
-        return this._params.readLeftBrace;
+        if (!this._params || this._params.readLeftBrace == undefined) {
+            return true;
+        }
+        return !!this._params.readLeftBrace;
     }
 
     protected get endTokenType() : TokenType {
+        if (!this._params || this._params.endTokenType == undefined) {
+            return TokenType.RightBrace;
+        }
         return this._params.endTokenType;
     }
 
@@ -22,10 +28,11 @@ class StatementBlockSubParser extends SubParser
 
         let tokenType: TokenType | undefined = undefined;
         while (this.currentTokenIndex < this._tokens.length) {
-            tokenType = this.peekToken()?.tokenType;
+            tokenType = this.readToken().tokenType;
             if (tokenType == this.endTokenType) {
                 break;
             }
+            this.backToken();
             StatementParser.parse(this._cmdBlock, out);
         }
     }

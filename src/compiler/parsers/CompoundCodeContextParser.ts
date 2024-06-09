@@ -11,7 +11,7 @@ import { OperatorInfo, OperatorParser, TernaryParser } from "./index";
 class CompoundCodeContextSubParser extends SubParser {
 
     public get checkColon(): boolean {
-        if (this._params.checkColon == undefined) {
+        if (!this._params || this._params.checkColon == undefined) {
             return true;
         }
         return this._params.checkColon;

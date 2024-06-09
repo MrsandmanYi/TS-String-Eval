@@ -56,4 +56,46 @@ export class ClassContext extends CodeContext {
     public getFunction(name: string): FunctionContext | undefined {
         return this.functionMap.get(name) || this.staticFunctionMap.get(name);
     }
+
+    public print() {
+        // 打印出类的信息，包括类名，父类，成员变量，成员方法
+        console.log("Class: " + this.className);
+        console.log("Parent: " + (!!this.parentClassName? this.parentClassName : "null"));
+        console.log("Abstract: " + this.isAbstract);
+        console.log("Export: " + this.isExport);
+        console.log("");
+
+        if (this.variableMap.size > 0) {   
+            console.log("Variables:");
+            this.variableMap.forEach((variable, key) => {
+                variable.print();
+                console.log("");
+            });   
+        }
+
+        if (this.staticVariableMap.size > 0){
+            console.log("Static Variables:");
+            this.staticVariableMap.forEach((variable, key) => {
+                variable.print();
+                console.log("");
+            });
+        }
+
+        if(this.functionMap.size > 0){
+            console.log("Functions:");
+            this.functionMap.forEach((func, key) => {
+                func.print();
+                console.log("");
+            });
+        }
+
+        if (this.staticFunctionMap.size > 0) {
+            console.log("Static Functions:");
+            this.staticFunctionMap.forEach((func, key) => {
+                func.print();
+                console.log("");
+            });
+        }
+
+    }
 }

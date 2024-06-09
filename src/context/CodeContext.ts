@@ -20,6 +20,11 @@ export class CodeContext {
     constructor(token: Token | null) {
         this._token = token;
     }
+
+    public print() {
+        console.log("         --Token: " + this.token?.tokenText);
+        console.log("         --PrefixType: " + PrefixType[this.prefixType]);
+    }
 }
 
 export enum AccessModifier {

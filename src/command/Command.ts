@@ -30,4 +30,19 @@ export class Command {
         this._token = token;
     }
 
+    public print(): void {
+        console.log("       --Command: " + CommandType[this.type]);
+        if (this.codeContext) {
+            if (typeof this.codeContext === "string") {
+                console.log("       --CodeContext: " + this.codeContext);
+            } else {
+                this.codeContext.print();
+            }
+        }
+
+        if (this.token) {
+            console.log("       --Token: " + this.token.tokenText);
+        }
+    }
+
 }

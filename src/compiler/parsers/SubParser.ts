@@ -97,7 +97,7 @@ export abstract class SubParser {
         this._params = params;
         out.tokenStartIndex = SyntaxParser.tokenIndex;
 
-        if (ENV_EDITOR) {
+        if (ENV_EDITOR) {            
             Logger.log("开始解析.... " + this.constructor.name, this.peekToken());
         }
 

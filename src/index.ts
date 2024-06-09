@@ -11,6 +11,18 @@ class Start {
             console.log(i);
         }        
     }
+
+    testFunc(param1 : number, param2 : string) {
+        if (param1 > 0) {
+            console.log(param1, param2);
+        }
+        else if(param2  == "debug") {
+            console.log("debug");
+        }
+        else {
+            console.log("else");
+        }
+    }
 }
 `);
 
