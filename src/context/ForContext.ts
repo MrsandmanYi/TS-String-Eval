@@ -1,7 +1,11 @@
 import { CmdBlock } from '../command/CmdBlock';
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 export class ForContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.For;
+    }
+    
     public begin: CmdBlock | null = null;            //开始执行
     public condition: CodeContext | null = null;          //跳出条件
     public loop: CmdBlock | null = null;             //循环执行
@@ -16,6 +20,10 @@ export class ForContext extends CodeContext {
  * 语法: for (identifier in loop) { cmdBlock }
  */
 export class ForInContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.ForIn;
+    }
+
     public identifier: string = ""; 
     public loop: CodeContext | null = null;
     public cmdBlock: CmdBlock | null = null;
@@ -27,6 +35,10 @@ export class ForInContext extends CodeContext {
  * 语法: for (begin; finished; step) { cmdBlock }
  */
 export class ForSimpleContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.ForSimple;
+    }
+
     public identifier: string = "";
     public begin: CodeContext | null = null;
     public finished: CodeContext | null = null;

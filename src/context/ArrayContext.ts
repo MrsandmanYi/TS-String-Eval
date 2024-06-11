@@ -1,10 +1,13 @@
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 /**
  * 数组上下文
  * 语法: [element1, element2, ...]
  */
 export class ArrayContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.Array;
+    }
     /**
      * 元素list
      */

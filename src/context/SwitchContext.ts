@@ -1,5 +1,5 @@
 import { CaseBlock } from "../compiler/base/ConditionBlock";
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 /**
  * switch语句
@@ -18,6 +18,9 @@ import { CodeContext } from "./CodeContext";
  * }
  */
 export class SwitchContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.Switch;
+    }
     
     public switchCondition: CodeContext | null = null;
     public defaultBlock: CaseBlock | null = null;

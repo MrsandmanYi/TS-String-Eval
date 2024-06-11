@@ -1,8 +1,11 @@
 import { ConditionBlock } from "../compiler/base/ConditionBlock";
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 export class IfContext extends CodeContext {
-
+    public get contextType(): ContextType {
+        return ContextType.If;
+    }
+    
     public ifCondition: ConditionBlock | null = null;
     public elseIfConditions: ConditionBlock[] = [];
     public elseCondition: ConditionBlock | null = null;

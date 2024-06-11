@@ -1,4 +1,4 @@
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 
 /**
@@ -16,7 +16,10 @@ export enum MemberMutator {
  * 成员上下文
  */
 export class MemberContext extends CodeContext{
-
+    public get contextType(): ContextType {
+        return ContextType.Member;
+    }
+    
     public readonly parent: MemberContext | null;  // parent.member, a.member
 
     public readonly value : string | CodeContext | number | Function;

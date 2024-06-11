@@ -1,4 +1,4 @@
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 
 /**
  * 调用函数类型, 普通调用，new调用
@@ -9,6 +9,9 @@ export enum InvokeFuncType {
 }
 
 export class InvokeFunctionContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.InvokeFunction;
+    }
     
     public invokeFuncType: InvokeFuncType = InvokeFuncType.Normal; // 调用类型
     public member: CodeContext | null = null;  // 所属成员

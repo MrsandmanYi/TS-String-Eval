@@ -1,6 +1,6 @@
 import { CmdBlock } from '../command/CmdBlock';
 import { Token } from '../compiler/Token';
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 import { MemberContext } from "./MemberContext";
 
 export enum FunctionType {
@@ -14,6 +14,9 @@ export enum FunctionType {
  * 函数上下文
  */
 export class FunctionContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.Function;
+    }
     
     public readonly params: string[];
     public readonly types: Array<MemberContext|undefined>;

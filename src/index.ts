@@ -32,3 +32,4 @@ let tokens = lexer.tokens;
 console.log(tokens);
 
 SyntaxParser.parse(tokens);
+

@@ -1,9 +1,13 @@
 import { Token } from "../compiler/Token";
-import { CodeContext } from "./CodeContext";
+import { CodeContext, ContextType } from "./CodeContext";
 import { FunctionContext } from "./FunctionContext";
 import { VariableContext } from "./VariableContext";
 
 export class ClassContext extends CodeContext {
+    
+    public get contextType(): ContextType {
+        return ContextType.Class;
+    }
     
     public readonly isObject: boolean = false; // 是否为对象
 

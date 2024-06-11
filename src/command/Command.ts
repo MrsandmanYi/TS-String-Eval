@@ -14,8 +14,8 @@ export class Command {
         return this._type;
     }
 
-    private _codeContext: CodeContext | string | null = null;
-    public get codeContext(): CodeContext | string | null {
+    private _codeContext: any = null;
+    public get codeContext(): any {
         return this._codeContext;
     }
 

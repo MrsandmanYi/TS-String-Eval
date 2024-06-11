@@ -1,9 +1,13 @@
-import { AccessModifier, CodeContext } from "./CodeContext";
+import { AccessModifier, CodeContext, ContextType } from "./CodeContext";
 
 /**
  * 变量上下文
  */
 export class VariableContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.Variable;
+    }
+    
     /** 变量名 */
     public readonly name: string;
     /** 值 */
