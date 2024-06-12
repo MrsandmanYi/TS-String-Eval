@@ -18,9 +18,9 @@ export class FunctionContext extends CodeContext {
         return ContextType.Function;
     }
     
-    public readonly params: string[];
-    public readonly types: Array<MemberContext|undefined>;
-    public readonly values: Array<CodeContext|undefined>;
+    public readonly params: string[];       // 参数名
+    public readonly types: Array<MemberContext|undefined>;  // 参数类型
+    public readonly values: Array<CodeContext|undefined>;   // 参数值
 
     public readonly name: string;
     public readonly isStatic: boolean;

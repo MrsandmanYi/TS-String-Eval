@@ -99,9 +99,9 @@ class StatementSubParser extends SubParser {
             case TokenType.Public:
             case TokenType.Private:
             case TokenType.Protected:
-                throw new ParserError(token, "StatementParser: 语句解析错误, 访问修饰符不应出现在此处");
+                throw new ParserError(token, "StatementParser: 语句解析错误, 访问修饰符不应出现在此处:" + TokenType[token.tokenType]);
             default:
-                throw new ParserError(token, "StatementParser: 语句解析错误, 不支持的Token类型");
+                throw new ParserError(token, "StatementParser: 语句解析错误, 不支持的Token类型: " + TokenType[token.tokenType]);
                 
         }
 

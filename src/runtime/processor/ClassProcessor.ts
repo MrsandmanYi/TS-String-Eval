@@ -1,7 +1,10 @@
+import { CmdBlockType } from '../../command/CmdBlockType';
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext } from "../../context/CodeContext";
 import { FunctionContext } from "../../context/FunctionContext";
 import { ProcessError } from "../base/ProcessError";
+import { FunctionProcessor } from "./FunctionProcessor";
+import { StatementProcessor } from "./StatementProcessor";
 import { ProcessResult, SubProcessor } from "./SubProcessor";
 
 // @ts-ignore
@@ -26,7 +29,7 @@ let __extends = (this && this.__extends) || function __extends(t: any, e: any) {
 class ClassSubProcessor extends SubProcessor {
 
     protected get classContext(): ClassContext {
-        return this._params.classContext;
+        return this.codeContext as ClassContext;
     }
 
     public processCore(out: ProcessResult): ProcessResult {
@@ -36,7 +39,9 @@ class ClassSubProcessor extends SubProcessor {
         let parentClass = null;
         if (this.classContext instanceof CodeContext) {
             let oldClass = this.currentClass;
-            parentClass = ClassProcessor.process(this.classContext.parentClass, out, null).value;
+            if (this.classContext.parentClass != null) {
+                parentClass = ClassProcessor.process(this.classContext.parentClass, out, null).value;
+            }
             this.currentClass = oldClass;
         }
         else {
@@ -45,7 +50,7 @@ class ClassSubProcessor extends SubProcessor {
         }
 
         let self = this;
-        let __Class = function(__super : any) {
+        let __Class = (function(__super : any) {
             let __classContext = self.classContext;
             if (!!parentClass) {
                 __extends(ClassCtor, __super);
@@ -53,6 +58,9 @@ class ClassSubProcessor extends SubProcessor {
 
             // 类构造函数
             function ClassCtor(this: any) {
+                if (!this) {
+                    throw new ProcessError(null, "ClassCtor: this 指针不能为空");
+                }
                 this[".classPath"] = __classContext.className;
                 this[".super"] = __super;
 
@@ -78,17 +86,68 @@ class ClassSubProcessor extends SubProcessor {
                     }
                     // 开始增加成员变量，并为成员变量赋默认值
                     for (let key in variableMap) {
-                        __this[key] = 
+                        let result = new ProcessResult();
+                        result.blockType = CmdBlockType.Function;
+                        result.context = __this;
+                        __this[key] = StatementProcessor.process(variableMap.get(key), result).value;
                     }
-
+                    // 调用构造函数
+                    FunctionProcessor.process(ctor, out, null, {thisObject: __this}).value();
+                    return __this;
                 }
                 else {
-
+                    let __this = __super && __super.call(this, args) || this;
+                    self.currentThisPtr = __this;
+                    // 开始增加成员变量，并为成员变量赋默认值
+                    for (let key in __classContext.variableMap) {
+                        let result = new ProcessResult();
+                        result.blockType = CmdBlockType.Function;
+                        result.context = __this;
+                        __this[key] = StatementProcessor.process(__classContext.variableMap.get(key), result).value;
+                    }
+                    return __this;
                 }
             }
 
-        }
+            // 处理类的成员函数
+            __classContext.functionMap.forEach((func, key) => {
+                if (key == "constructor") {
+                    // 构造函数不需要处理
+                    return;
+                }
+                let markName = key.substring(0, 5);
+                if (markName == ".get.") {
+                    let funcName = key.substring(5);
+                    Object.defineProperty(ClassCtor.prototype, funcName, {
+                        get: StatementProcessor.process(func, new ProcessResult(CmdBlockType.Function)).value
+                    });
+                }
+                else if (markName == ".set.") {
+                    let funcName = key.substring(5);
+                    Object.defineProperty(ClassCtor.prototype, funcName, {
+                        set: StatementProcessor.process(func, new ProcessResult(CmdBlockType.Function)).value
+                    });
+                }
+                else {
+                    ClassCtor.prototype[key] = StatementProcessor.process(func, new ProcessResult(CmdBlockType.Function)).value;
+                }
+            });
 
+            // 处理静态属性
+            __classContext.staticVariableMap.forEach((value, key) => {
+                let __Ctor: any = ClassCtor;
+                __Ctor[key] = StatementProcessor.process(__classContext.staticVariableMap.get(key), new ProcessResult(CmdBlockType.Function)).value;
+            });
+
+            // 处理静态函数
+            __classContext.staticFunctionMap.forEach((value, key) => {
+                let __Ctor: any = ClassCtor;
+                __Ctor[key] = StatementProcessor.process(__classContext.staticFunctionMap.get(key), new ProcessResult(CmdBlockType.Function)).value;
+            });
+
+            return ClassCtor;
+        }(parentClass));
+        out.value = __Class;
         return out;
     }
     

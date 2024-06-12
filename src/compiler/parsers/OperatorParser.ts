@@ -18,7 +18,7 @@ export const OperatorPriorityMap: Map<TokenType, OperatorInfo> = new Map<TokenTy
 
     [TokenType.BitwiseOr, { operator: TokenType.BitwiseOr, priority: 1 }],
     [TokenType.BitwiseAnd, { operator: TokenType.BitwiseAnd, priority: 1 }],
-    [TokenType.Xor, { operator: TokenType.Xor, priority: 1 }],
+    [TokenType.BitwiseXor, { operator: TokenType.BitwiseXor, priority: 1 }],
     [TokenType.ShiftLeft, { operator: TokenType.ShiftLeft, priority: 1 }],
     [TokenType.ShiftRight, { operator: TokenType.ShiftRight, priority: 1 }],
     [TokenType.And, { operator: TokenType.And, priority: 1 }],

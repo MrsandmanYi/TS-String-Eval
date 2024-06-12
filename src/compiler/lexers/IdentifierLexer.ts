@@ -89,12 +89,12 @@ export class IdentifierLexer extends SubLexer {
                 case "extends":
                     tokenType = TokenType.Extends;
                     break;
-                case "this":
-                    tokenType = TokenType.This;
-                    break;
-                case "super":
-                    tokenType = TokenType.Super;
-                    break;
+                // case "this":
+                //     tokenType = TokenType.This;
+                //     break;
+                // case "super":
+                //     tokenType = TokenType.Super;
+                //     break;
                 case "import":
                     tokenType = TokenType.Import;
                     break;

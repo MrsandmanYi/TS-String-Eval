@@ -2,6 +2,7 @@ import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext } from "../../context/CodeContext";
+import { Logger } from "../../utils/Logger";
 import { RunTime } from "../Runtime";
 
 export class ProcessResult {
@@ -16,6 +17,12 @@ export class ProcessResult {
     parent: ProcessResult | null = null;
     
     context: any;
+
+    constructor(blockType: CmdBlockType = CmdBlockType.None, parent: ProcessResult | null = null, context: any = {}){
+        this.blockType = blockType;
+        this.parent = parent;
+        this.context = context;
+    }
 }
 
 /**
@@ -86,7 +93,11 @@ export abstract class SubProcessor {
             return this.currentThisPtr[key];        // 从当前对象中查找
         }
         else{
-            return this.__global[key];        // 从全局对象中查找
+            let v = this.__global[key]; // 从全局对象中查找
+            if (!v) {
+                Logger.error("getContextValue 无法获取ContextValue: " + key);
+            }
+            return v;        
         }
 
     }

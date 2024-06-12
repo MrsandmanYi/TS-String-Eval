@@ -37,7 +37,9 @@ class ConditionSubProcessor extends SubProcessor {
         result.blockType = this.cmdBlockType;
         result.parent = out;
         result.context = {};
-        CommandProcessor.process(this.conditionBlock.cmdBlock, result);
+        CommandProcessor.process(null, result,null,{
+            cmdBlock : this.conditionBlock.cmdBlock
+        });
         out.value = true;
         return out;
     }

@@ -179,7 +179,7 @@ class CodeContextSubParser extends SubParser {
             else if (token.tokenType == TokenType.LeftParen) {
                 this.backToken();
                 let result = new ParserResult();
-                InvokeFunctionParser.parse(this.cmdBlock, result, { parentCodeContext: codeContext });
+                InvokeFunctionParser.parse(this.cmdBlock, result, { member: codeContext });
                 codeContext = result.codeContext as CodeContext;
             }
             else {

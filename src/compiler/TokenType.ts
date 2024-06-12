@@ -213,7 +213,7 @@ export enum TokenType {
     /**
      * ^ 异或		
      */
-    Xor = 70,
+    BitwiseXor = 70,
 
     /**
      * | 按位或

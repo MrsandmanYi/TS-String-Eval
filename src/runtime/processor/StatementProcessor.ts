@@ -1,7 +1,16 @@
+import { ClassContext } from "../../context/ClassContext";
 import { CodeContext, ContextType, PrefixType } from "../../context/CodeContext";
 import { TypeofContext } from "../../context/TypeofContext";
 import { ProcessError } from "../base/ProcessError";
+import { ArrayProcessor } from "./ArrayProcessor";
+import { DeleteProcessor } from "./DeleteProcessor";
+import { FunctionProcessor } from "./FunctionProcessor";
+import { GetVariableProcessor } from "./GetVariableProcessor";
+import { InvokeProcessor } from "./InvokeProcessor";
+import { NewProcessor } from "./NewProcessor";
+import { OperateProcessor } from "./OperateProcessor";
 import { ProcessResult, SubProcessor } from "./SubProcessor";
+import { TernaryProcessor } from "./TernaryProcessor";
 
 
 class StatementSubProcessor extends SubProcessor {
@@ -42,8 +51,44 @@ class StatementSubProcessor extends SubProcessor {
                 out.value = (codeContext as TypeofContext).value;
                 break;
             case ContextType.Delete:
-                out.value = DeleteProcessor.pr
+                DeleteProcessor.process(codeContext, out);
                 break;
+            case ContextType.Function:
+                FunctionProcessor.process(codeContext, out);
+                break;
+            case ContextType.InvokeFunction:
+                InvokeProcessor.process(codeContext, out);
+                break;
+            case ContextType.Member:
+                GetVariableProcessor.process(codeContext, out);
+                break;
+            case ContextType.Array:
+                ArrayProcessor.process(codeContext, out);
+                break;
+            case ContextType.Class:
+                let classContext = codeContext as ClassContext;
+                if (classContext.isObject){
+                    let cls : any = {};
+                    for(let key in classContext.variableMap){
+                        cls[key] = StatementProcessor.process(classContext.variableMap.get(key),out).value;
+                    }
+                    out.value = cls;
+                }
+                else {
+                    out.value = this.__classMap.get(classContext.className);
+                }
+                break;
+            case ContextType.Operator:
+                OperateProcessor.process(codeContext, out);
+                break;
+            case ContextType.Ternary:
+                TernaryProcessor.process(codeContext, out);
+                break;
+            case ContextType.New:
+                NewProcessor.process(codeContext, out);
+                break;
+            default:
+                throw new ProcessError(null, "StatementSubProcessor: 无法处理的代码上下文类型: " + codeContext.contextType);
         }
     }
 
