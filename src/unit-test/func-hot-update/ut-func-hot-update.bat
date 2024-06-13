@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/func-hot-update/ut-func-hot-update.js
