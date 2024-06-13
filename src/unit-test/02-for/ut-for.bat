@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/02-for/ut-for.js
