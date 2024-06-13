@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/04-variable/ut-variable.js
