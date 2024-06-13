@@ -4,10 +4,11 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 
 class BreakSubProcessor extends SubProcessor {
     public processCore(out: ProcessResult): ProcessResult {
-        if(!this.cmd){
+        let command = this.cmd;
+        if(!command){
             throw new Error("BreakProcessor: processCore 无法获取当前命令");
         }
-        this.invokeBreak(this.cmd.codeContext, out);
+        this.invokeBreak(command.codeContext, out);
         return out;    
     }
 

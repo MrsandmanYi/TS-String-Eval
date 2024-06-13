@@ -22,11 +22,12 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 class SwitchSubProcessor extends SubProcessor {
     
     public processCore(out: ProcessResult): ProcessResult {
-        if (this.cmd == null) {
+        let command = this.cmd;
+        if (command == null) {
             throw new Error("SwitchSubProcessor: cmd is null");
         }
 
-        let switchContext = this.cmd.codeContext as SwitchContext;
+        let switchContext = command.codeContext as SwitchContext;
 
         let condition = StatementProcessor.process(switchContext.switchCondition, out).value;
         let isMatch = false;

@@ -54,6 +54,9 @@ class OperatorSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
+        let operateStack = this.operateStack;
+        let contextStack = this.contextStack;
+
         let token = this.peekToken();
         if (!token) {
             return;
@@ -65,24 +68,24 @@ class OperatorSubParser extends SubParser {
         }
 
         this.readToken();
-        while (this.operateStack.length > 0) {
-            let operator = this.operateStack.peek();
+        while (operateStack.length > 0) {
+            let operator = operateStack.peek();
             if (operator && operator.priority >= currentOperator.priority) {
-                this.operateStack.pop();
-                let right = this.contextStack.pop();
-                let left = this.contextStack.pop();
+                operateStack.pop();
+                let right = contextStack.pop();
+                let left = contextStack.pop();
                 if (right && left) {
                     let operatorContext = new OperatorContext(right, left, operator.operator, this.peekToken());                    
-                    this.contextStack.push(operatorContext);
+                    contextStack.push(operatorContext);
                 }
             }
             else {
                 break;
             }
         }
-        this.operateStack.push(currentOperator);
+        operateStack.push(currentOperator);
 
-        out.codeContexts = this.contextStack.toArray();
+        out.codeContexts = contextStack.toArray();
     }
 }
 

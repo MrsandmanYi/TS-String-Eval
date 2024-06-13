@@ -13,10 +13,11 @@ import { ParserResult, SubParser } from "./SubParser";
 class WhileSubParser extends SubParser {
         
     protected parseCore(out: ParserResult): void {
+        let cmdBlock = this.cmdBlock;
         let whileContext: WhileContext = new WhileContext(this.peekToken());
         // 解析条件
-        ConditionParser.parse(this._cmdBlock, out, { tokenType: TokenType.While });
-        this._cmdBlock?.addCommand(new Command(CommandType.While_CMD, whileContext, this.peekToken()));
+        ConditionParser.parse(cmdBlock, out, { tokenType: TokenType.While });
+        cmdBlock?.addCommand(new Command(CommandType.While_CMD, whileContext, this.peekToken()));
     }
 
 }

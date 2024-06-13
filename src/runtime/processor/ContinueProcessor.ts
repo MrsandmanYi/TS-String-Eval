@@ -4,10 +4,11 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 
 class ContinueSubProcessor extends SubProcessor {
     public processCore(out: ProcessResult): ProcessResult {
-        if(!this.cmd){
+        let command = this.cmd;
+        if(!command){
             throw new Error("ContinueProcessor: processCore 无法获取当前命令");
         }
-        this.invokeContinue(this.cmd.codeContext, out);
+        this.invokeContinue(command.codeContext, out);
         return out;
     }
 

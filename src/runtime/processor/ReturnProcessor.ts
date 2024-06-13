@@ -5,10 +5,11 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 class ReturnSubProcessor extends SubProcessor {
 
     public processCore(out: ProcessResult): ProcessResult {
-        if(!this.cmd) {
+        let command = this.cmd;
+        if(!command) {
             throw new Error("ReturnProcessor: processCore 无法获取命令");
         }
-        let value = StatementProcessor.process(this.cmd.codeContext, out).value;
+        let value = StatementProcessor.process(command.codeContext, out).value;
         this.invokeReturn(value, out);
         return out;
     }

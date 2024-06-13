@@ -1,3 +1,4 @@
+import { CmdBlock } from "../../command/CmdBlock";
 import { ClassContext } from "../../context/ClassContext";
 import { AccessModifier, CodeContext } from "../../context/CodeContext";
 import { FunctionContext } from '../../context/FunctionContext';
@@ -20,6 +21,9 @@ class MembersSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
+        let cmdBlock = this.cmdBlock;
+        let classContext = this.classContext;
+
         this.readExpectedToken(TokenType.LeftBrace);
         while(this.peekToken().tokenType != TokenType.RightBrace){
             let token = this.peekToken();
@@ -57,8 +61,8 @@ class MembersSubParser extends SubParser {
                 // 解析是方法的情况
                 this.backToken(2);
                 let result = new ParserResult();
-                FunctionParser.parse(this._cmdBlock, result, {modifier: accessModifier, isStatic: isStatic});
-                this.classContext.addFunction(result.codeContext as FunctionContext);
+                FunctionParser.parse(cmdBlock, result, {modifier: accessModifier, isStatic: isStatic});
+                classContext.addFunction(result.codeContext as FunctionContext);
             }
             else {
                 // 解析是变量的情况
@@ -66,11 +70,11 @@ class MembersSubParser extends SubParser {
                 if(this.peekToken().tokenType == TokenType.Colon){
                     // 有类型
                     this.readToken();
-                    if (this.classContext.isObject) {
-                        variableType = this.getCompoundCodeContext();
+                    if (classContext.isObject) {
+                        variableType = this.getCompoundCodeContext(true, cmdBlock);
                     }
                     else {
-                        variableType = this.getCodeContext(CodeItemType.Type);
+                        variableType = this.getCodeContext(CodeItemType.Type, cmdBlock);
                     }
                 }
 
@@ -81,20 +85,20 @@ class MembersSubParser extends SubParser {
                     if (token.tokenType == TokenType.New) {     // = new()
                         token = this.readToken();
                         let result = new ParserResult();
-                        NewParser.parse(this._cmdBlock, result);
-                        this.classContext.addVariable(new VariableContext(memberName, result.codeContext, accessModifier, isStatic, token));
+                        NewParser.parse(cmdBlock, result);
+                        classContext.addVariable(new VariableContext(memberName, result.codeContext, accessModifier, isStatic, token));
                     }
                     else {      // = xxx
-                        let result = this.getCompoundCodeContext();
-                        this.classContext.addVariable(new VariableContext(memberName, result, accessModifier, isStatic, token));
+                        let result = this.getCompoundCodeContext(true, cmdBlock);
+                        classContext.addVariable(new VariableContext(memberName, result, accessModifier, isStatic, token));
                     }
                 }
                 else {
-                    if (this.classContext.className == "") {
-                        this.classContext.addVariable(new VariableContext(memberName, variableType||memberName, accessModifier, isStatic, token));
+                    if (classContext.className == "") {
+                        classContext.addVariable(new VariableContext(memberName, variableType||memberName, accessModifier, isStatic, token));
                     }
                     else{
-                        this.classContext.addVariable(new VariableContext(memberName, undefined, accessModifier, isStatic, token));
+                        classContext.addVariable(new VariableContext(memberName, undefined, accessModifier, isStatic, token));
                     }
                 }
             }
@@ -104,22 +108,22 @@ class MembersSubParser extends SubParser {
                 this.readToken();
             }
         }
-        out.setCodeContext(this.classContext);
+        out.setCodeContext(classContext);
         this.readExpectedToken(TokenType.RightBrace);
     }
 
-    private getCodeContext(itemType : CodeItemType = CodeItemType.Object): CodeContext {
+    private getCodeContext(itemType : CodeItemType = CodeItemType.Object, cmdBlock: CmdBlock | null): CodeContext {
         let parseResult = new ParserResult();
-        CodeContextParser.parse(this.cmdBlock, parseResult, {codeType : itemType});
+        CodeContextParser.parse(cmdBlock, parseResult, {codeType : itemType});
         if (!parseResult.codeContext) {
             throw new ParserError(null, "MembersSubParser getCodeContext 无法获取 codeContext");
         }
         return parseResult.codeContext;
     }
 
-    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+    private getCompoundCodeContext(checkColon: boolean = true, cmdBlock: CmdBlock | null): CodeContext {
         let parseResult = new ParserResult();
-        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        CompoundCodeContextParser.parse(cmdBlock, parseResult, {checkColon: checkColon});
         if (!parseResult.codeContext) {
             throw new ParserError(null, "MembersSubParser getCompoundCodeContext 无法获取 codeContext");
         }

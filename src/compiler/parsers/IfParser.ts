@@ -12,10 +12,10 @@ class IfSubParser extends SubParser {
 
 
     protected parseCore(out: ParserResult): void {
-        
+        let cmdBlock = this.cmdBlock;
         let ifContext: IfContext = new IfContext(this.peekToken());
         // 解析if条件
-        let ifCmdBlock = new CmdBlock(CmdBlockType.If, this._cmdBlock);
+        let ifCmdBlock = new CmdBlock(CmdBlockType.If, cmdBlock);
         ConditionParser.parse(ifCmdBlock, out, { tokenType: TokenType.If });
         ifContext.ifCondition = new ConditionBlock(out.codeContexts[0], ifCmdBlock);
         // 解析elseif条件
@@ -25,7 +25,7 @@ class IfSubParser extends SubParser {
                 if (this.peekToken()?.tokenType == TokenType.If) {
                     // else if
                     this.readToken();
-                    let elseIfCmdBlock = new CmdBlock(CmdBlockType.If, this._cmdBlock);
+                    let elseIfCmdBlock = new CmdBlock(CmdBlockType.If, cmdBlock);
                     ConditionParser.parse(elseIfCmdBlock, out, { tokenType: TokenType.ElseIf });
                     ifContext.addElseIf(new ConditionBlock(out.codeContexts[0], elseIfCmdBlock));
                 }
@@ -43,13 +43,13 @@ class IfSubParser extends SubParser {
         // 解析else
         if (this.peekToken()?.tokenType == TokenType.Else) {
             this.readToken();
-            let elseCmdBlock = new CmdBlock(CmdBlockType.If, this._cmdBlock);
+            let elseCmdBlock = new CmdBlock(CmdBlockType.If, cmdBlock);
             ConditionParser.parse(elseCmdBlock, out, { tokenType: TokenType.Else });
             ifContext.elseCondition = new ConditionBlock(out.codeContexts[0], elseCmdBlock);
         }
 
         // 添加if命令
-        this._cmdBlock?.addCommand(new Command(CommandType.If_CMD, ifContext, this.peekToken()));
+        cmdBlock?.addCommand(new Command(CommandType.If_CMD, ifContext, this.peekToken()));
 
         out.codeContexts = [ifContext];
     }

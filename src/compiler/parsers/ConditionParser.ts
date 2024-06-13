@@ -16,16 +16,18 @@ class ConditionSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
+        let tokenType = this.tokenType;
+        let cmdBlock = this.cmdBlock;
         let codeContext: CodeContext | null = null;
-        if (!(this.tokenType == TokenType.Else)) {
+        if (!(tokenType == TokenType.Else)) {
             // 有()的情况
             this.readExpectedToken(TokenType.LeftParen);
             let parseResult = new ParserResult();
-            CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
+            CompoundCodeContextParser.parse(cmdBlock, parseResult);
             codeContext = parseResult.codeContext;
             this.readExpectedToken(TokenType.RightParen);
         }
-        StatementBlockParser.parse(this._cmdBlock, out, { readLeftBrace: true, endTokenType: TokenType.RightBrace });
+        StatementBlockParser.parse(cmdBlock, out, { readLeftBrace: true, endTokenType: TokenType.RightBrace });
         out.codeContexts = [codeContext];
     }
     

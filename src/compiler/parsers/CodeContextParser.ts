@@ -1,3 +1,4 @@
+import { CmdBlock } from "../../command/CmdBlock";
 import { BasicTypeContext } from "../../context/BasicTypeContext";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext, PrefixType } from "../../context/CodeContext";
@@ -16,14 +17,16 @@ class CodeContextSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
-        let codeContext = this.getCodeContext(this.codeType);
+        let cmdBlock = this.cmdBlock;
+        let codeType = this.codeType;
+        let codeContext = this.getCodeContext(codeType, cmdBlock);
         out.setCodeContext(codeContext);
     }
 
     /**
      * 获取代码上下文, 用于解析单行语句，如果发现是复合语句则会调用 getCompoundCodeContext 方法
      */
-    protected getCodeContext(codeType : CodeItemType = CodeItemType.Object) : CodeContext | null {
+    protected getCodeContext(codeType : CodeItemType = CodeItemType.Object, cmdBlock: CmdBlock | null) : CodeContext | null {
         let codeContext : CodeContext | null = null;
         let token = this.readToken();
 
@@ -63,7 +66,7 @@ class CodeContextSubParser extends SubParser {
             case TokenType.LeftParen: // ( ， ()=>void , ():void =>{}
                 if (codeType == CodeItemType.Object) {
                     let parseResult = new ParserResult();
-                    CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
+                    CompoundCodeContextParser.parse(cmdBlock, parseResult);
                     codeContext = parseResult.codeContext;
                 }
                 else{
@@ -77,18 +80,18 @@ class CodeContextSubParser extends SubParser {
                 }
                 break;
             case TokenType.Function: // function
-                FunctionParser.parse(this.cmdBlock, result);
+                FunctionParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
             case TokenType.LeftBracket:
                 this.backToken();
-                ArrayParser.parse(this.cmdBlock, result);
+                ArrayParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
             case TokenType.LeftBrace:
                 this.backToken();
                 codeContext = new ClassContext(true, token);
-                MembersParser.parse(this.cmdBlock, result, { classContext: codeContext as ClassContext });
+                MembersParser.parse(cmdBlock, result, { classContext: codeContext as ClassContext });
                 //codeContext = result.codeContext;
                 break;
             case TokenType.Void:
@@ -112,15 +115,15 @@ class CodeContextSubParser extends SubParser {
                 }
                 break;
             case TokenType.New:
-                NewParser.parse(this.cmdBlock, result);
+                NewParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
             case TokenType.TypeOf:
-                TypeofParser.parse(this.cmdBlock, result);
+                TypeofParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
             case TokenType.Delete:
-                DeleteParser.parse(this.cmdBlock, result);
+                DeleteParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
             default:
@@ -131,7 +134,7 @@ class CodeContextSubParser extends SubParser {
             throw new ParserError(token, "getCodeContext 无法获取 codeContext");
         }
 
-        codeContext = this.getVariable(codeContext);
+        codeContext = this.getVariable(codeContext, cmdBlock);
         codeContext.prefixType = prefixType;
 
         if (codeContext instanceof MemberContext) {
@@ -158,7 +161,7 @@ class CodeContextSubParser extends SubParser {
         return codeContext;
     }
 
-    protected getVariable(parent : CodeContext): CodeContext {
+    protected getVariable(parent : CodeContext, cmdBlock: CmdBlock | null): CodeContext {
         let codeContext = parent;
         while(true){
             let token = this.readToken();
@@ -178,7 +181,7 @@ class CodeContextSubParser extends SubParser {
             }
             else if (token.tokenType == TokenType.LeftBracket) {
                 let parseResult = new ParserResult();
-                CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
+                CompoundCodeContextParser.parse(cmdBlock, parseResult);
                 let keyContext = parseResult.codeContext as CodeContext;
                 codeContext = new MemberContext(codeContext as MemberContext, keyContext, MemberMutator.None, token);
                 
@@ -189,7 +192,7 @@ class CodeContextSubParser extends SubParser {
             else if (token.tokenType == TokenType.LeftParen) {
                 this.backToken();
                 let result = new ParserResult();
-                InvokeFunctionParser.parse(this.cmdBlock, result, { member: codeContext });
+                InvokeFunctionParser.parse(cmdBlock, result, { member: codeContext });
                 codeContext = result.codeContext as CodeContext;
             }
             else {
