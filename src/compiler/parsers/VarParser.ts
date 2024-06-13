@@ -8,8 +8,8 @@ import { ParserResult, SubParser } from "./SubParser";
  * 变量声明解析器
  * 语法: var a = 1, b = 2, c = 3;
  * 语法: var a, b, c;
- * 语法: var a: int = 1, b: int = 2, c: int = 3;
- * 语法: var a: int, b: int, c: int;
+ * 语法: var a: number = 1, b: number = 2, c: number = 3;
+ * 语法: var a: number, b: number, c: number;
  * */
 class VarSubParser extends SubParser {
 
@@ -22,7 +22,7 @@ class VarSubParser extends SubParser {
             let peekToken = this.peekToken();
             cmdBlock?.addCommand(new Command(CommandType.Let, token.tokenText, peekToken));
             // 处理有冒号的情况
-            if (token.tokenType == TokenType.Colon) {
+            if (peekToken.tokenType == TokenType.Colon) {
                 this.readToken();
                 this.readToken();
                 peekToken = this.peekToken(); 
