@@ -35,10 +35,10 @@ export class IdentifierLexer extends SubLexer {
 
             switch (identifier) {
                 case "var":
-                    tokenType = TokenType.Let;
+                    tokenType = TokenType.Var;
                     break;
                 case "let":
-                    tokenType = TokenType.Let;
+                    tokenType = TokenType.Var;
                     break;
                 case "const":
                     tokenType = TokenType.Const;
@@ -89,12 +89,12 @@ export class IdentifierLexer extends SubLexer {
                 case "extends":
                     tokenType = TokenType.Extends;
                     break;
-                case "this":
-                    tokenType = TokenType.This;
-                    break;
-                case "super":
-                    tokenType = TokenType.Super;
-                    break;
+                // case "this":
+                //     tokenType = TokenType.This;
+                //     break;
+                // case "super":
+                //     tokenType = TokenType.Super;
+                //     break;
                 case "import":
                     tokenType = TokenType.Import;
                     break;
@@ -128,8 +128,20 @@ export class IdentifierLexer extends SubLexer {
                 case "case":
                     tokenType = TokenType.Case;
                     break;
+                case "in":
+                    tokenType = TokenType.In;
+                    break;
+                case "of":
+                    tokenType = TokenType.Of;
+                    break;
                 case "default":
                     tokenType = TokenType.Default;
+                    break;
+                case "void":
+                    tokenType = TokenType.Void;
+                    break;
+                case "NaN":
+                    tokenType = TokenType.NaN;
                     break;
                 default:
                     break;

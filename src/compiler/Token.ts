@@ -2,7 +2,6 @@ import { TokenType } from "./TokenType";
 
 // 语法标记
 export class Token {
-    
     // 语法标记类型
     protected _tokenType: TokenType = TokenType.None;
     public get tokenType(): TokenType {

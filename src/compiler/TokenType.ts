@@ -16,7 +16,7 @@ export enum TokenType {
     /**
      * var/let 声明可变变量
      */
-    Let = 2,
+    Var = 2,
 
     /**
      * const 声明不可变变量
@@ -213,7 +213,7 @@ export enum TokenType {
     /**
      * ^ 异或		
      */
-    Xor = 70,
+    BitwiseXor = 70,
 
     /**
      * | 按位或
@@ -243,7 +243,7 @@ export enum TokenType {
     /**
      * ^= 异或赋值
      */
-    AssignXor = 76,
+    AssignBitwiseXor = 76,
 
     /**
      * |= 按位或赋值
@@ -507,6 +507,36 @@ export enum TokenType {
     IS = 146,
 
     /**
+     * else if 关键字
+     */
+    ElseIf = 147,
+
+    /**
+     * of 关键字
+     */
+    Of = 148,
+
+    /**
+     * async 关键字
+     */
+    Async = 149,
+
+    /**
+     * await 关键字
+     */
+    Await = 150,
+
+    /**
+     * void 关键字
+     */
+    Void = 151,
+
+    /**
+     * NaN 关键字
+     */
+    NaN = 152,
+
+    /**
      * 字符串
      */
     String = 200,
@@ -515,4 +545,14 @@ export enum TokenType {
      * 数字
      */
     Number = 210,
+
+    /**
+     * - 负数
+     */
+    Negative = 211,
+
+    /**
+     * + 正数
+     */
+    Positive = 212,
 }
