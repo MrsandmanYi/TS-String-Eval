@@ -39,7 +39,7 @@ export class StringLexer extends SubLexer{
                         str += char;
                     }
                     else if (char === "\"" || char === "'" || char === "`") {
-                        if (char === line[lineIndex]) {
+                        if (char === startChar) {
                             isEnd = true;
                             endColumn = j;
                             endLine = i;
