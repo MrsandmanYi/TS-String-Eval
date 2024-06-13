@@ -15,6 +15,7 @@ class FunctionSubProcessor extends SubProcessor {
 
     public processCore(out: ProcessResult): ProcessResult {
         let self = this;
+        let selfObject = this.thisObject;
         let funcContext = self.codeContext as FunctionContext;
         let tempFunc : any = (function() {
 
@@ -22,7 +23,7 @@ class FunctionSubProcessor extends SubProcessor {
             let params = funcContext.params;
             let values = funcContext.values;
 
-            let __this = self.thisObject;
+            let __this = selfObject;
 
             function tempFunc(this: any) {
                 self.currentThisPtr = this;
@@ -43,8 +44,8 @@ class FunctionSubProcessor extends SubProcessor {
             return tempFunc;
         })();
 
-        if (this.thisObject) {
-            out.value = tempFunc.bind(this.thisObject);
+        if (selfObject) {
+            out.value = tempFunc.bind(selfObject);
         }
         else {
             out.value = tempFunc;

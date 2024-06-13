@@ -35,9 +35,11 @@ class CommandSubProcessor extends SubProcessor {
         
 
     public processCore(out: ProcessResult): ProcessResult {
-        
-        for(let i = 0; i < this.cmdBlock.commands.length; i++) {
-            let cmd = this.cmdBlock.commands[i];
+        // fix: 修复了无法执行多个命令的问题, 持有命令块，防止嵌套调用cmdBlock被替换
+        let cmdBlock = this.cmdBlock;
+
+        for(let i = 0; i < cmdBlock.commands.length; i++) {
+            let cmd = cmdBlock.commands[i];
             this.processCommand(cmd, out);
             if (out.isOver || out.isBreak || out.isContinue) {      //  TODO: continue break? 
                 break;

@@ -18,6 +18,8 @@ class SetVariableSubProcessor extends SubProcessor {
 
     public processCore(out: ProcessResult): ProcessResult {
         
+        let variableValue = this.value;
+
         let member = this.codeContext as MemberContext;
         if (member == null) {
             throw new ProcessError(null, "SetVariableProcessor: processCore 无法获取变量");
@@ -74,14 +76,14 @@ class SetVariableSubProcessor extends SubProcessor {
             }
 
             currentMember[".this"] = parent;
-            if (parent && this.value == undefined){
+            if (parent && variableValue == undefined){
                 // 删除元素
                 let o = delete parent[this.getMemberValue(currentMember, out)];
                 out.value = o;
                 return out;
             }
             else if (parent) {
-                parent[this.getMemberValue(currentMember, out)] = this.value;
+                parent[this.getMemberValue(currentMember, out)] = variableValue;
             }
 
         }
@@ -95,7 +97,7 @@ class SetVariableSubProcessor extends SubProcessor {
                 if (result.parent) {
                     result = result.parent;
                     if (result.context[key] != undefined) {
-                        result.context[key] = this.value;
+                        result.context[key] = variableValue;
                         hasSet = true;
                         break;
                     }
@@ -106,7 +108,7 @@ class SetVariableSubProcessor extends SubProcessor {
             } 
 
             if (!hasSet) {
-                currentResult.context[this.getMemberValue(member,result)] = this.value;
+                currentResult.context[this.getMemberValue(member,result)] = variableValue;
             }
         }
 
