@@ -85,12 +85,12 @@ class ClassSubProcessor extends SubProcessor {
                         }
                     }
                     // 开始增加成员变量，并为成员变量赋默认值
-                    for (let key in variableMap) {
+                    variableMap.forEach((value, key) => {
                         let result = new ProcessResult();
                         result.blockType = CmdBlockType.Function;
                         result.context = __this;
-                        __this[key] = StatementProcessor.process(variableMap.get(key), result).value;
-                    }
+                        __this[key] = StatementProcessor.process(variableMap.get(key)?.value, result).value;
+                    });
                     // 调用构造函数
                     FunctionProcessor.process(ctor, out, null, {thisObject: __this}).value();
                     return __this;
@@ -99,12 +99,12 @@ class ClassSubProcessor extends SubProcessor {
                     let __this = __super && __super.call(this, args) || this;
                     self.currentThisPtr = __this;
                     // 开始增加成员变量，并为成员变量赋默认值
-                    for (let key in __classContext.variableMap) {
+                    __classContext.variableMap.forEach((value, key) => {
                         let result = new ProcessResult();
                         result.blockType = CmdBlockType.Function;
                         result.context = __this;
-                        __this[key] = StatementProcessor.process(__classContext.variableMap.get(key), result).value;
-                    }
+                        __this[key] = StatementProcessor.process(__classContext.variableMap.get(key)?.value, result).value;
+                    });
                     return __this;
                 }
             }
