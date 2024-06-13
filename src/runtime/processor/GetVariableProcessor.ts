@@ -29,7 +29,7 @@ class GetVariableSubProcessor extends SubProcessor {
             }
             members.reverse();
             if (members[0].contextType == ContextType.InvokeFunction) {            
-                result = StatementProcessor.process(member, new ProcessResult()).value;
+                result = StatementProcessor.process(member, out).value;
             }
             else{
                 result = this.getContextValue(out, this.getMemberValue(members[0], out));
@@ -71,7 +71,7 @@ class GetVariableSubProcessor extends SubProcessor {
             currentMember[".this"] = parent;
             if (result == undefined && classContext) {
                 let currentClass = this.currentClass;
-                let result = ClassProcessor.process(classContext, new ProcessResult()).value;
+                let result = ClassProcessor.process(classContext, out).value;
                 this.currentClass = currentClass;
 
                 out.value = result;
@@ -108,19 +108,19 @@ class GetVariableSubProcessor extends SubProcessor {
             }
 
             if (member.mutator == MemberMutator.PreIncrement) {
-                result = ++result;
+                ++result;
             }
             else if (member.mutator == MemberMutator.PreDecrement) {
-                result = --result;
+                --result;
             }
             else if (member.mutator == MemberMutator.PostIncrement) {
-                result = result++;
+                result++;
             }
             else if (member.mutator == MemberMutator.PostDecrement) {
-                result = result--;
+                result--;
             }
 
-            SetVariableProcessor.process(member, new ProcessResult(), null,{value: result});
+            SetVariableProcessor.process(member, out, null,{value: result});
         }
 
         out.value = result;

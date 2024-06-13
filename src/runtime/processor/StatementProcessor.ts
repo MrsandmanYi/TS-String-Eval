@@ -3,6 +3,7 @@ import { CodeContext, ContextType, PrefixType } from "../../context/CodeContext"
 import { TypeofContext } from "../../context/TypeofContext";
 import { ProcessError } from "../base/ProcessError";
 import { ArrayProcessor } from "./ArrayProcessor";
+import { AssignProcessor } from "./AssignProcessor";
 import { DeleteProcessor } from "./DeleteProcessor";
 import { FunctionProcessor } from "./FunctionProcessor";
 import { GetVariableProcessor } from "./GetVariableProcessor";
@@ -84,11 +85,14 @@ class StatementSubProcessor extends SubProcessor {
             case ContextType.Ternary:
                 TernaryProcessor.process(codeContext, out);
                 break;
+            case ContextType.Assign:
+                AssignProcessor.process(codeContext, out);
+                break;
             case ContextType.New:
                 NewProcessor.process(codeContext, out);
                 break;
             default:
-                throw new ProcessError(null, "StatementSubProcessor: 无法处理的代码上下文类型: " + codeContext.contextType);
+                throw new ProcessError(null, "StatementSubProcessor: 无法处理的代码上下文类型: " + ContextType[codeContext.contextType]);
         }
     }
 

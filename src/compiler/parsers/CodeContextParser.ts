@@ -99,7 +99,17 @@ class CodeContextSubParser extends SubParser {
             case TokenType.False:
             case TokenType.Number:
             case TokenType.String:
-                codeContext = new BasicTypeContext(token.tokenText, token);
+                if (token.tokenType == TokenType.Number) {
+                    // 字符串转数字，考虑Hex、整数、浮点数
+                    let number = Number(token.tokenText);
+                    if (isNaN(number)) {
+                        throw new ParserError(token, "getCodeContext 无法获取 number");
+                    }
+                    codeContext = new BasicTypeContext(number, token);
+                }
+                else{
+                    codeContext = new BasicTypeContext(token.tokenText, token);
+                }
                 break;
             case TokenType.New:
                 NewParser.parse(this.cmdBlock, result);

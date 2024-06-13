@@ -1,6 +1,7 @@
 import { CmdBlockType } from "../../command/CmdBlockType";
 import { ForContext } from "../../context/ForContext";
 import { CommandProcessor } from "./CommandProcessor";
+import { StatementProcessor } from "./StatementProcessor";
 import { ProcessResult, SubProcessor } from "./SubProcessor";
 
 /**
@@ -28,7 +29,7 @@ class ForSubProcessor extends SubProcessor {
         while (true) {
             // 执行判断语句
             if (forContext.condition != null) {
-                let condition = CommandProcessor.process(forContext.condition, forResult).value;
+                let condition = StatementProcessor.process(forContext.condition, forResult).value;
                 if (!condition) {
                     break;
                 }
