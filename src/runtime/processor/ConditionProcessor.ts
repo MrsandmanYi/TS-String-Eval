@@ -22,23 +22,26 @@ class ConditionSubProcessor extends SubProcessor {
     
     public processCore(out: ProcessResult): ProcessResult {
 
-        if(!this.conditionBlock){
+        let conditionBlock = this.conditionBlock;
+        let cmdBlockType = this.cmdBlockType;
+
+        if(!conditionBlock){
             out.value = false;
             return out;
         }
 
-        if (this.conditionBlock.condition) {
-            let conditionResult = StatementProcessor.process(this.conditionBlock.condition, out);
+        if (conditionBlock.condition) {
+            let conditionResult = StatementProcessor.process(conditionBlock.condition, out);
             return out;
         }
 
         let result = new ProcessResult();
         result.value = undefined;
-        result.blockType = this.cmdBlockType;
+        result.blockType = cmdBlockType;
         result.parent = out;
         result.context = {};
         CommandProcessor.process(null, result,null,{
-            cmdBlock : this.conditionBlock.cmdBlock
+            cmdBlock : conditionBlock.cmdBlock
         });
         out.value = true;
         return out;

@@ -2,7 +2,7 @@ import { CodeContext } from "../../context/CodeContext";
 import { InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext } from "../../context/MemberContext";
 import { TokenType } from "../TokenType";
-import { CodeContextParser } from "./CodeContextParser";
+import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { ParserError, ParserResult, SubParser } from "./SubParser";
 
 /**
@@ -19,11 +19,11 @@ class InvokeFunctionSubParser extends SubParser {
 
         this.readExpectedToken(TokenType.LeftParen); // 读取左括号( ,参数列表开始
 
-        let funcParams : MemberContext[] = [];      // 函数参数列表
+        let funcParams : CodeContext[] = [];      // 函数参数列表
         let token = this.peekToken();
         while (token.tokenType != TokenType.RightParen) {
             let member = this.getCodeContext();
-            funcParams.push(member as MemberContext);
+            funcParams.push(member);
             token = this.peekToken();
             if (token.tokenType == TokenType.Comma) {
                 this.readToken();
@@ -44,7 +44,7 @@ class InvokeFunctionSubParser extends SubParser {
 
     private getCodeContext(): CodeContext {
         let parseResult = new ParserResult();
-        CodeContextParser.parse(this.cmdBlock, parseResult);
+        CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
         if (!parseResult.codeContext) {
             throw new ParserError(null, "FunctionParser getCodeContext 无法获取 codeContext");
         }

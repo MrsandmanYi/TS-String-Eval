@@ -2,7 +2,6 @@ import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext } from "../../context/CodeContext";
-import { Logger } from "../../utils/Logger";
 import { RunTime } from "../Runtime";
 
 export class ProcessResult {
@@ -95,7 +94,7 @@ export abstract class SubProcessor {
         else{
             let v = this.__global[key]; // 从全局对象中查找
             if (!v) {
-                Logger.error("getContextValue 无法获取ContextValue: " + key);
+                //Logger.error("getContextValue 无法获取ContextValue: " + key);
             }
             return v;        
         }
