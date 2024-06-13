@@ -13,11 +13,12 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 class WhileSubProcessor extends SubProcessor {
 
     public processCore(out: ProcessResult): ProcessResult {
-        if (this.cmd == null) {
+        let command = this.cmd;
+        if (command == null) {
             throw new Error("ForSubProcessor: cmd is null");
         }
         
-        let whileContext = this.cmd.codeContext as WhileContext;
+        let whileContext = command.codeContext as WhileContext;
         let condition = whileContext.whileCondition;
         while (true) {
             let conditionResult = new ProcessResult();  // TODO: 待优化，不需要每次都创建新的ProcessResult

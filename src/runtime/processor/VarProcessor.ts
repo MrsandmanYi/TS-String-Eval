@@ -6,10 +6,11 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 class VarSubProcessor extends SubProcessor {
 
     public processCore(out: ProcessResult): ProcessResult {
-        if(!this.cmd){
+        let command = this.cmd;
+        if(!command){
             throw new Error("VarProcessor: processCore 无法获取变量");
         }
-        let name: any = this.cmd.codeContext;
+        let name: any = command.codeContext;
         out.context[name] = null;   // 为变量赋null值, 只是为了声明变量
         return out;
     }

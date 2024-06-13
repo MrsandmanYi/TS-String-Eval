@@ -5,12 +5,12 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 
 class IfSubProcessor extends SubProcessor {
     public processCore(out: ProcessResult): ProcessResult {
-
-        if (this.cmd == null) {
+        let command = this.cmd;
+        if (command == null) {
             throw new Error("IfSubProcessor: cmd is null");
         }
 
-        let ifContext = this.cmd.codeContext as IfContext;
+        let ifContext = command.codeContext as IfContext;
         if(ConditionProcessor.process(null,out,null,{
             conditionBlock: ifContext.ifCondition,
             cmdBlockType: CmdBlockType.If

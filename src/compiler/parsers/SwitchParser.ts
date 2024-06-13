@@ -13,6 +13,7 @@ import { ParserError, ParserResult, SubParser } from "./SubParser";
 class SwitchSubParser extends SubParser {
 
     protected parseCore(out: ParserResult): void {
+        let cmdBlock = this.cmdBlock;
         let switchContext: SwitchContext = new SwitchContext(this.peekToken());
         // 解析条件
         this.readExpectedToken(TokenType.LeftParen);
@@ -28,16 +29,16 @@ class SwitchSubParser extends SubParser {
 
             if (token.tokenType == TokenType.Case) {
                 let caseValues: any[] = []; // case 值
-                this.parseCaseValues(caseValues);
+                this.parseCaseValues(caseValues, cmdBlock);
                 // case 包裹的语句块
-                let caseCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.Switch, this._cmdBlock);
+                let caseCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.Switch, cmdBlock);
                 StatementBlockParser.parse(caseCmdBlock, out, {readLeftBrace: false, endTokenType: TokenType.Break});
                 switchContext.addCaseBlock(new CaseBlock(caseValues, caseCmdBlock));
             }
             else if (token.tokenType == TokenType.Default) {
                 this.readExpectedToken(TokenType.Colon); // :
                 // default 包裹的语句块
-                let defaultCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.Switch, this._cmdBlock);
+                let defaultCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.Switch, cmdBlock);
                 StatementBlockParser.parse(defaultCmdBlock, out, {readLeftBrace: false, endTokenType: TokenType.Break});
                 switchContext.defaultBlock = new CaseBlock([], defaultCmdBlock);
             }
@@ -49,24 +50,24 @@ class SwitchSubParser extends SubParser {
 
         this.readExpectedToken(TokenType.RightBrace);
 
-        this._cmdBlock?.addCommand(new Command(CommandType.Switch_CMD, switchContext, this.peekToken()));
+        cmdBlock?.addCommand(new Command(CommandType.Switch_CMD, switchContext, this.peekToken()));
     }
 
 
-    protected parseCaseValues(values: any[]) {
-        values.push(this.getCompoundCodeContext(false));
+    protected parseCaseValues(values: any[], cmdBlock: CmdBlock | null) {
+        values.push(this.getCompoundCodeContext(false, cmdBlock));
         this.readExpectedToken(TokenType.Colon);
         if (this.readToken()?.tokenType == TokenType.Case) {
-            this.parseCaseValues(values);
+            this.parseCaseValues(values, cmdBlock);
         }
         else{
             this.backToken();
         }
     }
 
-    private getCompoundCodeContext(checkColon: boolean = true): CodeContext {
+    private getCompoundCodeContext(checkColon: boolean = true, cmdBlock: CmdBlock | null = null): CodeContext {
         let parseResult = new ParserResult();
-        CompoundCodeContextParser.parse(this.cmdBlock, parseResult, {checkColon: checkColon});
+        CompoundCodeContextParser.parse(cmdBlock, parseResult, {checkColon: checkColon});
         if (!parseResult.codeContext) {
             throw new ParserError(null, "getCompoundCodeContext 无法获取 codeContext");
         }

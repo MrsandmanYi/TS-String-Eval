@@ -13,11 +13,12 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
  */
 class ForSubProcessor extends SubProcessor {
     public processCore(out: ProcessResult): ProcessResult {
-        if (this.cmd == null) {
+        let command = this.cmd;
+        if (command == null) {
             throw new Error("ForSubProcessor: cmd is null");
         }
 
-        let forContext = this.cmd.codeContext as ForContext;
+        let forContext = command.codeContext as ForContext;
 
         let forResult = new ProcessResult();
         forResult.blockType = CmdBlockType.For;

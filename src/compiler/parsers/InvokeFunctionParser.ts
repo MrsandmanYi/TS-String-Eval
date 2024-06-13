@@ -1,3 +1,4 @@
+import { CmdBlock } from "../../command/CmdBlock";
 import { CodeContext } from "../../context/CodeContext";
 import { InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext } from "../../context/MemberContext";
@@ -15,6 +16,7 @@ class InvokeFunctionSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
+        let cmdBlock = this.cmdBlock;
         let context = new InvokeFunctionContext(this.peekToken());
 
         this.readExpectedToken(TokenType.LeftParen); // 读取左括号( ,参数列表开始
@@ -22,7 +24,7 @@ class InvokeFunctionSubParser extends SubParser {
         let funcParams : CodeContext[] = [];      // 函数参数列表
         let token = this.peekToken();
         while (token.tokenType != TokenType.RightParen) {
-            let member = this.getCodeContext();
+            let member = this.getCodeContext(cmdBlock);
             funcParams.push(member);
             token = this.peekToken();
             if (token.tokenType == TokenType.Comma) {
@@ -42,9 +44,9 @@ class InvokeFunctionSubParser extends SubParser {
         out.codeContexts = [context];
     }
 
-    private getCodeContext(): CodeContext {
+    private getCodeContext(cmdBlock: CmdBlock | null): CodeContext {
         let parseResult = new ParserResult();
-        CompoundCodeContextParser.parse(this.cmdBlock, parseResult);
+        CompoundCodeContextParser.parse(cmdBlock, parseResult);
         if (!parseResult.codeContext) {
             throw new ParserError(null, "FunctionParser getCodeContext 无法获取 codeContext");
         }

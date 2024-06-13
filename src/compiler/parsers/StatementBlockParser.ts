@@ -22,18 +22,22 @@ class StatementBlockSubParser extends SubParser
     }
 
     protected parseCore(out: ParserResult): void {
-        if (this.readLeftBrace) {
+        let cmdBlock = this.cmdBlock;
+        let readLeftBrace = this.readLeftBrace;
+        let endTokenType = this.endTokenType;
+
+        if (readLeftBrace) {
             this.readExpectedToken(TokenType.LeftBrace);
         }
 
         let tokenType: TokenType | undefined = undefined;
         while (this.currentTokenIndex < this._tokens.length) {
             tokenType = this.readToken().tokenType;
-            if (tokenType == this.endTokenType) {
+            if (tokenType == endTokenType) {
                 break;
             }
             this.backToken();
-            StatementParser.parse(this._cmdBlock, out);
+            StatementParser.parse(cmdBlock, out);
         }
     }
 }

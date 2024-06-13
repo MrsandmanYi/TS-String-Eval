@@ -14,11 +14,12 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
  */
 class ForInSubProcessor extends SubProcessor {
     public processCore(out: ProcessResult): ProcessResult {
-        if (this.cmd == null) {
+        let command = this.cmd;
+        if (command == null) {
             throw new ProcessError(null, "ForInSubProcessor: cmd is null");
         }
 
-        let forInContext = this.cmd.codeContext as ForInContext;
+        let forInContext = command.codeContext as ForInContext;
         let loop = StatementProcessor.process(forInContext.loop, out).value;
         if (!loop) {
             throw new ProcessError(null, "ForInSubProcessor: loop is null");    

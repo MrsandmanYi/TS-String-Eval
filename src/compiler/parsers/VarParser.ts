@@ -14,13 +14,13 @@ import { ParserResult, SubParser } from "./SubParser";
 class VarSubParser extends SubParser {
 
     protected parseCore(out: ParserResult): void {
-        
+        let cmdBlock = this.cmdBlock;
         while(true) {
             // 读取变量名
             let token = this.readExpectedToken(TokenType.Identifier);
             // 读取 冒号\等号\逗号
             let peekToken = this.peekToken();
-            this._cmdBlock?.addCommand(new Command(CommandType.Let, token.tokenText, peekToken));
+            cmdBlock?.addCommand(new Command(CommandType.Let, token.tokenText, peekToken));
             // 处理有冒号的情况
             if (token.tokenType == TokenType.Colon) {
                 this.readToken();
@@ -40,7 +40,7 @@ class VarSubParser extends SubParser {
                 }
                 
                 // 解析表达式 (等号右边的表达式)
-                StatementParser.parse(this._cmdBlock, out);
+                StatementParser.parse(cmdBlock, out);
             }
 
             // 处理有逗号的情况

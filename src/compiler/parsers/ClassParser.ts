@@ -1,3 +1,4 @@
+import { CmdBlock } from "../../command/CmdBlock";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext } from "../../context/CodeContext";
 import { TokenType } from "../TokenType";
@@ -16,7 +17,7 @@ class ClassSubParser extends SubParser {
 
 
     protected parseCore(out: ParserResult): void {
-        
+        let cmdBlock = this.cmdBlock;
         let isExport: boolean = !!this.getExpectedToken(TokenType.Export);
         let isAbstract: boolean = !!this.getExpectedToken(TokenType.Abstract);
 
@@ -37,7 +38,7 @@ class ClassSubParser extends SubParser {
         let parentClassName = this.readParentClass();
         classContext.parentClassName = parentClassName;
         // 读取类成员
-        this.readMembers(classContext);
+        this.readMembers(classContext, cmdBlock);
 
         out.setCodeContext(classContext);
     }
@@ -52,9 +53,9 @@ class ClassSubParser extends SubParser {
         return "";
     }
 
-    protected readMembers(classContext : CodeContext) {
+    protected readMembers(classContext : CodeContext, cmdBlock: CmdBlock | null) {
         let result = new ParserResult();
-        MembersParser.parse(this._cmdBlock, result, {classContext: classContext});
+        MembersParser.parse(cmdBlock, result, {classContext: classContext});
     }
 
 }

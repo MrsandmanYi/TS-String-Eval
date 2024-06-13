@@ -18,7 +18,8 @@ class CompoundCodeContextSubParser extends SubParser {
     }
 
     protected parseCore(out: ParserResult): void {
-        let codeContext = this.getCompoundCodeContext(this.checkColon);
+        let checkColon = this.checkColon;
+        let codeContext = this.getCompoundCodeContext(checkColon);
         out.setCodeContext(codeContext);
     }
     
@@ -27,13 +28,14 @@ class CompoundCodeContextSubParser extends SubParser {
      * @param checkColon 是否检查冒号, 默认为 true, 如：case 语句块不需要检查冒号
      */
     protected getCompoundCodeContext(checkColon: boolean = true) : CodeContext {
+        let cmdBlock = this.cmdBlock;
         let operatorStack: Stack<OperatorInfo> = new Stack<OperatorInfo>();
         let codeContextStack: Stack<CodeContext> = new Stack<CodeContext>();
         
         // 解析出运算符
         while (true) {
             let parseResult = new ParserResult();
-            CodeContextParser.parse(this.cmdBlock, parseResult);
+            CodeContextParser.parse(cmdBlock, parseResult);
             let codeContext = parseResult.codeContext;
             if (codeContext) {
                 codeContextStack.push(codeContext);
@@ -43,7 +45,7 @@ class CompoundCodeContextSubParser extends SubParser {
             }
 
             let result = new ParserResult();
-            OperatorParser.parse(this.cmdBlock, result, { operateStack: operatorStack, contextStack: codeContextStack });
+            OperatorParser.parse(cmdBlock, result, { operateStack: operatorStack, contextStack: codeContextStack });
             if (!result.codeContext) {
                 break;
             }

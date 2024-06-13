@@ -10,13 +10,14 @@ import { ParserResult, SubParser } from "./SubParser";
 class TrySubParser extends SubParser {
         
     protected parseCore(out: ParserResult): void {
+        let cmdBlock = this.cmdBlock;
         let tryContext: TryContext = new TryContext(this.peekToken());
         // 解析try块
-        let tryCmdBlock = new CmdBlock(CmdBlockType.Function, this._cmdBlock);
+        let tryCmdBlock = new CmdBlock(CmdBlockType.Function, cmdBlock);
         StatementBlockParser.parse(tryCmdBlock, out, {readLeftBrace: true, endTokenType: TokenType.RightBrace});
         tryContext.tryBlock = tryCmdBlock;
         // 解析catch块
-        let catchCmdBlock = new CmdBlock(CmdBlockType.Function, this._cmdBlock);
+        let catchCmdBlock = new CmdBlock(CmdBlockType.Function, cmdBlock);
         this.readExpectedToken(TokenType.Catch);
         this.readExpectedToken(TokenType.LeftParen);
         tryContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
@@ -29,14 +30,14 @@ class TrySubParser extends SubParser {
         StatementBlockParser.parse(catchCmdBlock, out, {readLeftBrace: true, endTokenType: TokenType.RightBrace});
         tryContext.catchBlock = catchCmdBlock;
         // 解析finally块
-        let finallyCmdBlock = new CmdBlock(CmdBlockType.Function, this._cmdBlock);
+        let finallyCmdBlock = new CmdBlock(CmdBlockType.Function, cmdBlock);
         if (this.peekToken()?.tokenType == TokenType.Finally) {
             this.readExpectedToken(TokenType.Finally);
             StatementBlockParser.parse(finallyCmdBlock, out, {readLeftBrace: true, endTokenType: TokenType.RightBrace});
             tryContext.finallyBlock = finallyCmdBlock;
         }
 
-        this._cmdBlock?.addCommand(new Command(CommandType.Try_CMD, tryContext, this.peekToken()));
+        cmdBlock?.addCommand(new Command(CommandType.Try_CMD, tryContext, this.peekToken()));
     }
 }
 

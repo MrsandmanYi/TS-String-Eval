@@ -16,17 +16,23 @@ import { ParserError, ParserResult, SubParser } from "./SubParser";
 export class FunctionSubParser extends SubParser {
     
     protected get modifier(): AccessModifier {
-        if (!this._params.modifier) {
+        if (!this._params || !this._params.modifier) {
             return AccessModifier.Public;
         }
         return this._params.modifier;
     }
 
     protected get isStatic(): boolean {
+        if (!this._params) {
+            return false;
+        }
         return !!this._params.isStatic;
     }
 
     protected parseCore(out: ParserResult): void {
+        let isStatic = this.isStatic;
+        let modifier = this.modifier;
+
         let token = this.readToken();
         if(!token) return;
         let funcType = FunctionType.Normal;
@@ -122,7 +128,7 @@ export class FunctionSubParser extends SubParser {
         StatementBlockParser.parse(cmdBlock, out, {readLeftBrace: true, endTokenType: TokenType.RightBrace});
 
         let functionContext:FunctionContext = 
-            new FunctionContext(name, this.isStatic, params, types, values, hasDynamicParams, cmdBlock, this.peekToken());
+            new FunctionContext(name, isStatic, params, types, values, hasDynamicParams, cmdBlock, this.peekToken());
     
         token = this.readToken();
         this.backToken();

@@ -6,7 +6,8 @@ import { ProcessResult, SubProcessor } from "./SubProcessor";
 class TrySubProcessor extends SubProcessor {
     
     public processCore(out: ProcessResult): ProcessResult {
-        let tryContext = this.cmd?.codeContext as TryContext;
+        let command = this.cmd;
+        let tryContext = command?.codeContext as TryContext;
         try {
             let tryResult = new ProcessResult();
             tryResult.blockType = out.blockType;
