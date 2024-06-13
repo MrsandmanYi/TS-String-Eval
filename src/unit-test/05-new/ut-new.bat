@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/05-new/ut-new.js
