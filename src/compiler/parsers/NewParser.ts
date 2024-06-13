@@ -3,6 +3,7 @@ import { Command } from "../../command/Command";
 import { CommandType } from "../../command/CommandType";
 import { CodeContext } from "../../context/CodeContext";
 import { NewContext } from "../../context/NewContext";
+import { TokenType } from "../TokenType";
 import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { ParserError, ParserResult, SubParser } from "./SubParser";
 
@@ -11,7 +12,13 @@ class NewSubParser extends SubParser {
         let cmdBlock = this.cmdBlock;
         let newContext: NewContext = new NewContext(this.getCompoundCodeContext(true, cmdBlock),this.peekToken());
         if (cmdBlock) {
-            cmdBlock.addCommand(new Command(CommandType.New_CMD, newContext, this.peekToken()));
+            if (cmdBlock.commands.length > 0 && 
+                cmdBlock.commands[cmdBlock.commands.length - 1].token?.tokenType == TokenType.Assign) {
+                // 如果是赋值语句, 那不额外增加new命令，赋值语句有表达式解析器处理
+            }
+            else{
+                cmdBlock.addCommand(new Command(CommandType.New_CMD, newContext, this.peekToken()));
+            }
         }
         out.setCodeContext(newContext);
     }
