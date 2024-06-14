@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/08-ifelse/ut-ifelse.js
