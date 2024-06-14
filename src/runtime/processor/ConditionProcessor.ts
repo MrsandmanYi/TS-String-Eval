@@ -46,6 +46,9 @@ class ConditionSubProcessor extends SubProcessor {
         CommandProcessor.process(null, result,null,{
             cmdBlock : conditionBlock.cmdBlock
         });
+        out.isBreak = result.isBreak;
+        out.isContinue = result.isContinue;
+        out.isOver = result.isOver;
         out.value = true;
         return out;
     }

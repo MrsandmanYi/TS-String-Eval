@@ -30,16 +30,16 @@ class WhileSubProcessor extends SubProcessor {
                 conditionBlock: condition,
                 cmdBlockType: CmdBlockType.While
             }).value;
-            
+
             if (!r) {
                 break;
             }
 
-            if (out.isBreak || out.isOver) {
+            if (conditionResult.isBreak || conditionResult.isOver) {
                 break;
             }
 
-            if (out.isContinue) {
+            if (conditionResult.isContinue) {
                 continue;
             }
         }
