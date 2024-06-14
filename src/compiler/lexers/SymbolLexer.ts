@@ -43,7 +43,7 @@ export class SymbolLexer extends SubLexer {
                 let nextNextChar = columnIndex + 2 < line.length ? line[columnIndex + 2] : "";
                 if (nextChar === "." && nextNextChar === ".") {
                     tokenType = TokenType.Spread;
-                    console.error("...符号暂未支持")
+                    throw Error("... 可变参数符号暂未支持~")
                 }
                 else {
                     tokenType = TokenType.Dot;

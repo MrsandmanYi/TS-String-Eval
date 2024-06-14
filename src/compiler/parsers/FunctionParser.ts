@@ -32,7 +32,7 @@ export class FunctionSubParser extends SubParser {
     protected parseCore(out: ParserResult): void {
         let isStatic = this.isStatic;
         let modifier = this.modifier;
-
+        let mineCmdBlock = this.cmdBlock;
         let token = this.readToken();
         if(!token) return;
         let funcType = FunctionType.Normal;
@@ -81,7 +81,7 @@ export class FunctionSubParser extends SubParser {
                 if (token?.tokenType == TokenType.Colon) {
                     this.readExpectedToken(TokenType.Colon);
                     // 参数类型
-                    let codeContext = this.getCodeContext();
+                    let codeContext = this.getCodeContext(mineCmdBlock);
                     if (codeContext instanceof AssignContext) {
                         types.push(codeContext.member);
                         values.push(codeContext.value);
@@ -94,7 +94,7 @@ export class FunctionSubParser extends SubParser {
                 else if (token?.tokenType == TokenType.Assign) {
                     // 参数默认值, (a = 1)
                     this.backToken();
-                    let assignContext: AssignContext = this.getCodeContext() as AssignContext;
+                    let assignContext: AssignContext = this.getCodeContext(mineCmdBlock) as AssignContext;
                     values.push(assignContext.value);
                 }
                 else {
@@ -118,7 +118,7 @@ export class FunctionSubParser extends SubParser {
         this.readExpectedToken(TokenType.RightParen);
         token = this.readToken();
         if (token?.tokenType == TokenType.Colon) {
-            this.getCodeContext();
+            this.getCodeContext(mineCmdBlock);
         }
         else {
             this.backToken();
@@ -142,9 +142,9 @@ export class FunctionSubParser extends SubParser {
         out.setCodeContext(functionContext);
     }
 
-    private getCodeContext(): CodeContext {
+    private getCodeContext(cmdBlock : CmdBlock | null): CodeContext {
         let parseResult = new ParserResult();
-        CodeContextParser.parse(this.cmdBlock, parseResult);
+        CodeContextParser.parse(cmdBlock, parseResult);
         if (!parseResult.codeContext) {
             throw new ParserError(null, "FunctionParser getCodeContext 无法获取 codeContext");
         }

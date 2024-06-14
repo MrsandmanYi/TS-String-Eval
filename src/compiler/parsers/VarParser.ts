@@ -22,16 +22,29 @@ class VarSubParser extends SubParser {
             let peekToken = this.peekToken();
             cmdBlock?.addCommand(new Command(CommandType.Let, token.tokenText, peekToken));
             // 处理有冒号的情况
+            let isTypeArray = false;
             if (peekToken.tokenType == TokenType.Colon) {
                 this.readToken();
                 this.readToken();
                 peekToken = this.peekToken(); 
+                if (peekToken?.tokenType == TokenType.LeftBracket) {
+                    // 数组类型, let arr: number[]
+                    this.readToken();
+                    this.readToken();
+                    isTypeArray = true;
+                    peekToken = this.peekToken();
+                }
             }
 
             // 处理有等号的情况
             if (peekToken?.tokenType == TokenType.Assign) {
                 this.backToken();
                 this.backToken();
+                if (isTypeArray) {
+                    this.backToken();
+                    this.backToken();
+                }
+
                 if (this.peekToken().tokenType == TokenType.Colon) {
                     this.backToken();
                 }
@@ -40,7 +53,7 @@ class VarSubParser extends SubParser {
                 }
                 
                 // 解析表达式 (等号右边的表达式)
-                StatementParser.parse(cmdBlock, out);
+                StatementParser.parse(cmdBlock, out, {isTypeArray: isTypeArray});
             }
 
             // 处理有逗号的情况

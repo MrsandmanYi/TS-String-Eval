@@ -164,7 +164,15 @@ class CodeContextSubParser extends SubParser {
     protected getVariable(parent : CodeContext, cmdBlock: CmdBlock | null): CodeContext {
         let codeContext = parent;
         while(true){
+            
             let token = this.readToken();
+            if (parent.token?.tokenType == TokenType.Identifier) {
+                 if (token.tokenType == TokenType.LeftBracket) {
+                    this.readToken();
+                    this.readToken();
+                    token = this.peekToken();
+                 }  
+            }
             if (token.tokenType == TokenType.Dot) { // . 点号
                 let identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
                 codeContext = new MemberContext(codeContext as MemberContext, identifier, MemberMutator.None, token);
