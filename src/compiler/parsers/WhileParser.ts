@@ -1,7 +1,10 @@
+import { CmdBlock } from "../../command/CmdBlock";
+import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { CommandType } from "../../command/CommandType";
 import { WhileContext } from "../../context/WhileContext";
 import { TokenType } from "../TokenType";
+import { ConditionBlock } from "../base/ConditionBlock";
 import { ConditionParser } from './ConditionParser';
 import { ParserResult, SubParser } from "./SubParser";
 
@@ -16,7 +19,9 @@ class WhileSubParser extends SubParser {
         let cmdBlock = this.cmdBlock;
         let whileContext: WhileContext = new WhileContext(this.peekToken());
         // 解析条件
-        ConditionParser.parse(cmdBlock, out, { tokenType: TokenType.While });
+        let whileCmdBlock = new CmdBlock(CmdBlockType.While, cmdBlock);
+        ConditionParser.parse(whileCmdBlock, out, { tokenType: TokenType.While });
+        whileContext.whileCondition = new ConditionBlock(out.codeContext, whileCmdBlock);
         cmdBlock?.addCommand(new Command(CommandType.While_CMD, whileContext, this.peekToken()));
     }
 
