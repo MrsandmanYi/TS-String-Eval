@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/07-array/ut-array.js
