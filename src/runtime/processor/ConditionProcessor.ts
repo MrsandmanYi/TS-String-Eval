@@ -32,7 +32,10 @@ class ConditionSubProcessor extends SubProcessor {
 
         if (conditionBlock.condition) {
             let conditionResult = StatementProcessor.process(conditionBlock.condition, out);
-            return out;
+            if (!conditionResult.value) {
+                out.value = false;
+                return out;
+            }
         }
 
         let result = new ProcessResult();
