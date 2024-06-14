@@ -10,8 +10,13 @@ export class TestClass {
 
     public va: number = 100;
 
+    public map :Map<number, string> = new Map<number, string>();
+
     constructor() {
         console.log("....TestClass constructor");
+        this.map.set(1, "one");
+        this.map.set(2, "two");
+        this.map.set(3, "three");
     }
 
     public testFunc(a: number, b: number, c: number) {
@@ -20,6 +25,29 @@ export class TestClass {
 
     public testFunc2(a: number, b: number, ...args: number[]) {
         console.log("a: " + a + ", b: " + b + ", args: " + args);
+    }
+
+    public foreachFunc(value: string, key: number) {
+        console.log("foreachFunc: "+ "key: " + key + ", value: " + value);
+    }
+    
+    public foreachFunc2(value: string, key: number) {
+        console.log("foreachFunc2: "+ "key: " + key + ", value: " + value);
+    }
+
+    public testMapForeach(map2 :Map<number, string>) {
+        console.log("testMapForeach...............");
+        map2.forEach((value, key) => {
+            this.foreachFunc(value, key);
+        });
+    }
+
+    public testMapForeach2(map2 :Map<number, string>, func: (value: string, key: number) => void) {
+        console.log("testMapForeach2...............");
+        this.foreachFunc2 = func;
+        map2.forEach((value, key) => {
+            this.foreachFunc2(value, key);
+        });
     }
 }
 
@@ -30,14 +58,32 @@ class Start {
     constructor() { 
         let testClass = new TestClass();
 
+        console.log(testClass.testFunc);
+        console.log(testClass["testFunc2"]);
+
         testClass.testFunc(1, 2, 3);
         testClass.testFunc2(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        // 这种方式可以成功赋值方法
+        testClass.foreachFunc = function(value, key) {
+            //console.log("testsss");
+            console.log("testClass foreach: "+ "key: " + key + ", value: " + value);
+        }
+
+        testClass.testMapForeach(testClass.map);
+
+        // TODO 无法成功赋值方法，需要修复
+        testClass.testMapForeach2(testClass.map, function(value, key) {
+            console.log("testClass foreach2: "+ "key: " + key + ", value: " + value);
+        });
 
         let myClass = new MyClass();
 
         myClass.testFunc(1, 2, 3);
         let arr = [3, 4, 5, 6, 7, 8, 9, 10];
         myClass.testFunc2(1, 2, arr);
+
+
     }
 }
 
