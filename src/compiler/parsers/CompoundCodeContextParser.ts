@@ -74,7 +74,12 @@ class CompoundCodeContextSubParser extends SubParser {
                     token = this.peekToken();
                     if (token.tokenType == TokenType.LeftBracket) {
                         this.readToken();
-                        this.readToken();
+                        if (this.peekToken().tokenType == TokenType.RightBracket) {
+                            this.readToken();
+                        }
+                        else{
+                            this.backToken();
+                        }
                     }
                     token = this.readToken();
                 }

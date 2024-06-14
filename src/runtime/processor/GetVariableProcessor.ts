@@ -136,10 +136,12 @@ class GetVariableSubProcessor extends SubProcessor {
         }
         else if (member instanceof MemberContext) {
             StatementProcessor.process(member.value as CodeContext, out);
+            return out.value;
         }
         else {
             // wtf?
             StatementProcessor.process(member, out);
+            return out.value;
         }
     }
 
