@@ -168,9 +168,11 @@ class CodeContextSubParser extends SubParser {
             let token = this.readToken();
             if (parent.token?.tokenType == TokenType.Identifier) {
                  if (token.tokenType == TokenType.LeftBracket) {
-                    this.readToken();
-                    this.readToken();
-                    token = this.peekToken();
+                    if (this.peekToken().tokenType == TokenType.RightBracket) {
+                        this.readToken();
+                        this.readToken();
+                        token = this.peekToken();
+                    }
                  }  
             }
             if (token.tokenType == TokenType.Dot) { // . 点号
