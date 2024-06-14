@@ -1,0 +1,1 @@
+tsc -b && node dist/unit-test/10-while/ut-while.js
