@@ -10,6 +10,8 @@ import { RunTime } from "../../runtime/Runtime";
 
 export class TestClass {
 
+    public array :number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     constructor() {
 
     }
@@ -52,6 +54,21 @@ class Start {
             }
             else {
                 console.log("array[" + i + "] <= 2", "b: " + b);
+            }
+        }
+
+        console.log("......test array2.......");
+        let testClass = new TestClass();
+        for (let i = 0; i < testClass.array.length; i++) {
+            let b = testClass.array[i];
+            if (b > 5) {
+                console.log("testClass array[" + i + "] > 5", "b: " + b);
+            }
+            else if (b > 2) {
+                console.log("testClass array[" + i + "] > 2", "b: " + b);
+            }
+            else {
+                console.log("testClass array[" + i + "] <= 2", "b: " + b);
             }
         }
     }
