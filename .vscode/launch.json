@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            //"program": "${workspaceFolder}\\src\\unit-test\\02-for\\ut-for.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\03-invoke\\ut-invoke.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\func-hot-update\\ut-func-hot-update.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\04-variable\\ut-variable.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\05-new\\ut-new.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-function.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\07-array\\ut-array.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\08-ifelse\\ut-ifelse.ts",
+            "program": "${workspaceFolder}\\src\\unit-test\\10-while\\ut-while.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        }
+    ]
+}
