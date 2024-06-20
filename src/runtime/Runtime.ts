@@ -30,7 +30,12 @@ export class RunTime {
         SyntaxParser.parse(params.tokens);
 
         RunTime.__classMap = SyntaxParser.classMap;
-        RunTime.__global = params.global;
+        if (!RunTime.__global) {
+            RunTime.__global = {...RunTime.__global, ...params.global};
+        }
+        else {
+            RunTime.__global = params.global;
+        }
         
         // 解析类
         RunTime.__classMap.forEach((value, key) => {
@@ -39,7 +44,10 @@ export class RunTime {
         });
 
         let mainCls = RunTime.__global[params.mainClassName];
-        RunTime.__main = new mainCls();
+        if (RunTime.__main == null) {
+            RunTime.__main = {}
+        }
+        RunTime.__main[params.mainClassName] = new mainCls();
     }
 
 }
