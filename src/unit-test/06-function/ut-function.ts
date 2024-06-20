@@ -12,6 +12,12 @@ export class TestClass {
 
     public map :Map<number, string> = new Map<number, string>();
 
+    public get prop1(){
+        return function(){
+            console.log("xxx prop1............");
+        };
+    }
+
     constructor() {
         console.log("....TestClass constructor");
         this.map.set(1, "one");
@@ -93,6 +99,9 @@ class Start {
 
         let paramsClass = new ParamsClass();
         testClass.testClassParams(paramsClass);
+
+        console.log(testClass.prop1);
+        testClass.prop1();
     }
 }
 
