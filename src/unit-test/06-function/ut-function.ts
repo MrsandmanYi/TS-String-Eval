@@ -49,6 +49,14 @@ export class TestClass {
             this.foreachFunc2(value, key);
         });
     }
+
+    public testClassParams(params : any){
+        console.log("testClassParams...............");
+        console.log(params.param1);
+        console.log(params.param2);
+        console.log(params.param3);
+        console.log(params);
+    }
 }
 
 
@@ -83,7 +91,17 @@ class Start {
         let arr = [3, 4, 5, 6, 7, 8, 9, 10];
         myClass.testFunc2(1, 2, arr);
 
+        let paramsClass = new ParamsClass();
+        testClass.testClassParams(paramsClass);
+    }
+}
 
+class ParamsClass {
+    let param1: number = 100;
+    let param2: string = "hello";
+    let param3: boolean = true;
+    constructor() {
+    
     }
 }
 
