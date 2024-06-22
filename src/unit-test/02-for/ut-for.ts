@@ -27,6 +27,10 @@ class Start {
         }
 
         let testClass = new TestClass();
+        for(let keyValue of testClass.testMap){
+            console.log("for of: ", keyValue);
+            console.log("for of: ", keyValue[0], keyValue[1]);
+        }
     }
 }
 `);
