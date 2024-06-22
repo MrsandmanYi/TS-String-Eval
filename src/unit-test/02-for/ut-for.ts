@@ -1,14 +1,32 @@
 import { Lexer } from "../../compiler/Lexer";
 import { RunTime } from "../../runtime/Runtime";
 
+export class TestClass {
+
+    public testMap: Map<number, string> = new Map<number, string>();
+
+    constructor(){
+        console.log("....TestClass constructor");
+        this.testMap.set(1, "one");
+        this.testMap.set(2, "two");
+        this.testMap.set(3, "three");
+    }
+
+}
 
 const lexer = new Lexer(`
 class Start {
     constructor() { 
         for(let i = 0; i < 10; i++) {
-            console.log("Hello World!");
-            console.log(i);
+            console.log("for: " + i);
         }
+
+        let arr = [1,3,5,7,2,6];
+        for(let i in arr){
+            console.log("for in: ",i, arr[i]);
+        }
+
+        let testClass = new TestClass();
     }
 }
 `);
@@ -21,7 +39,8 @@ RunTime.run({
     tokens: tokens,
     mainClassName: "Start",
     global: {
-        console: console
+        console: console,
+        TestClass: TestClass,
     }
 });
 

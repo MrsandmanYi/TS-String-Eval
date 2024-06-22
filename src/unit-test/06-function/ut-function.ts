@@ -49,7 +49,7 @@ export class TestClass {
     }
 
     public testMapForeach2(map2 :Map<number, string>, func: (value: string, key: number) => void) {
-        console.log("testMapForeach2...............");
+        console.log("testMapForeach2...............",func);
         this.foreachFunc2 = func;
         map2.forEach((value, key) => {
             this.foreachFunc2(value, key);
@@ -86,10 +86,15 @@ class Start {
 
         testClass.testMapForeach(testClass.map);
 
-        // TODO 无法成功赋值方法，需要修复
-        testClass.testMapForeach2(testClass.map, function(value, key) {
+        let func = function(value, key) {
             console.log("testClass foreach2: "+ "key: " + key + ", value: " + value);
-        });
+        }
+        testClass.testMapForeach2(testClass.map, func);
+
+        // TODO 这样无法成功赋值方法，需要修复
+        // testClass.testMapForeach2(testClass.map, function(value, key) {
+        //     console.log("testClass foreach2: "+ "key: " + key + ", value: " + value);
+        // });
 
         let myClass = new MyClass();
 
