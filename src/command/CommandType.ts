@@ -70,4 +70,9 @@ export enum CommandType {
      */
     Delete_CMD = 17,
 
+    /**
+     * forof 循环
+     */
+    ForOf_CMD = 18,
+
 }

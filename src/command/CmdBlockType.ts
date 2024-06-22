@@ -20,4 +20,6 @@ export enum CmdBlockType {
     While = 8,      // while 语句
 
     Switch = 9,     // switch 语句
+
+    ForOf = 10,     // for of 语句
 }

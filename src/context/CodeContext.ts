@@ -41,6 +41,7 @@ export enum ContextType {
     Delete,
     For,
     ForIn,
+    ForOf,
     ForSimple,
     Function,
     If,

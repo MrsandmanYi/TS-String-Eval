@@ -29,6 +29,15 @@ export class ForInContext extends CodeContext {
     public cmdBlock: CmdBlock | null = null;
 }
 
+export class ForOfContext extends CodeContext {
+    public get contextType(): ContextType {
+        return ContextType.ForOf;
+    }
+
+    public identifier: string = ""; 
+    public loop: CodeContext | null = null;
+    public cmdBlock: CmdBlock | null = null;
+}
 
 /**
  * for 循环上下文

@@ -5,6 +5,7 @@ import { BreakProcessor } from "./BreakProcessor";
 import { ContinueProcessor } from "./ContinueProcessor";
 import { DeleteProcessor } from "./DeleteProcessor";
 import { ForInProcessor } from "./ForInProcessor";
+import { ForOfProcessor } from "./ForOfProcessor";
 import { ForProcessor } from "./ForProcessor";
 import { ForSimpleProcessor } from "./ForSimpleProcessor";
 import { IfProcessor } from "./IfProcessor";
@@ -61,6 +62,7 @@ class CommandSubProcessor extends SubProcessor {
             case CommandType.If_CMD: IfProcessor.process(cmd.codeContext, out, cmd); break;
             case CommandType.For_CMD: ForProcessor.process(cmd.codeContext, out, cmd); break;
             case CommandType.ForIn_CMD: ForInProcessor.process(cmd.codeContext, out, cmd); break;
+            case CommandType.ForOf_CMD: ForOfProcessor.process(cmd.codeContext, out, cmd); break;
             case CommandType.ForSimple_CMD: ForSimpleProcessor.process(cmd.codeContext, out, cmd); break;
             case CommandType.While_CMD: WhileProcessor.process(cmd.codeContext, out, cmd); break;
             case CommandType.Switch_CMD: SwitchProcessor.process(cmd.codeContext, out, cmd); break;

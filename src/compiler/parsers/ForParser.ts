@@ -3,7 +3,7 @@ import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { CommandType } from "../../command/CommandType";
 import { CodeContext } from "../../context/CodeContext";
-import { ForContext, ForInContext, ForSimpleContext } from "../../context/ForContext";
+import { ForContext, ForInContext, ForOfContext, ForSimpleContext } from "../../context/ForContext";
 import { TokenType } from "../TokenType";
 import { CompoundCodeContextParser } from "./CompoundCodeContextParser";
 import { StatementBlockParser } from "./StatementBlockParser";
@@ -26,6 +26,11 @@ class ForSubParser extends SubParser {
             // for in 语句 for(let s in arr) {}
             this.backToken(3);
             this.parseForIn(out, cmdBlock);
+        }
+        else if (token.tokenType == TokenType.Of) {
+            // for of 语句 for(let s of arr) {}
+            this.backToken(3);
+            this.parseForOf(out, cmdBlock);
         }
         else {
             this.backToken(3);
@@ -130,6 +135,30 @@ class ForSubParser extends SubParser {
 
         cmdBlock?.addCommand(new Command(CommandType.ForIn_CMD, forInContext, this.peekToken()));
     }
+
+    private parseForOf(out: ParserResult, cmdBlock: CmdBlock | null) {
+        let forOfContext: ForOfContext = new ForOfContext(this.peekToken());
+        let forOfCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.ForOf, cmdBlock);
+
+        this.readExpectedToken(TokenType.LeftParen);
+        this.readExpectedToken(TokenType.Var);
+
+        forOfContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
+        if (this.peekToken()?.tokenType == TokenType.Colon) {
+            // 处理有类型的情况
+            this.readToken();
+            this.readExpectedToken(TokenType.Identifier);
+        }
+        this.readExpectedToken(TokenType.Of);
+        forOfContext.loop = this.getCompoundCodeContext(true, cmdBlock);
+        this.readExpectedToken(TokenType.RightParen);
+
+        StatementBlockParser.parse(forOfCmdBlock, out, { readLeftBrace: true, endTokenType: TokenType.RightBrace });
+        forOfContext.cmdBlock = forOfCmdBlock;
+
+        cmdBlock?.addCommand(new Command(CommandType.ForOf_CMD, forOfContext, this.peekToken()));
+    }
+
 
     private getCompoundCodeContext(checkColon: boolean = true, cmdBlock: CmdBlock | null): CodeContext {
         let parseResult = new ParserResult();
