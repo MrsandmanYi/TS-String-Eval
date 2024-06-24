@@ -67,8 +67,9 @@ export enum AccessModifier {
 // 标识符类型
 export enum PrefixType {
     None,
-    Not,
-    NotNot,
-    Negative,
+    Not,        // !
+    NotNot,     // !!
+    Negative,   // -
+    Negation,   // ~
 }
     

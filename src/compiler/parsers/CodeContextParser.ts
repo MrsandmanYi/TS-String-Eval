@@ -35,6 +35,10 @@ class CodeContextSubParser extends SubParser {
             prefixType = PrefixType.Not;
             token = this.readToken();
         }
+        if (token.tokenType == TokenType.BitwiseNot) {
+            prefixType = PrefixType.Negation
+            token = this.readToken();
+        }
         else if (token.tokenType == TokenType.NotNot) {
             prefixType = PrefixType.NotNot;
             

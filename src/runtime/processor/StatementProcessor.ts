@@ -31,6 +31,9 @@ class StatementSubProcessor extends SubProcessor {
         if (codeContext.prefixType == PrefixType.Not) {
             out.value = !out.value;
         }
+        else if (codeContext.prefixType == PrefixType.Negation) {
+            out.value = ~out.value;
+        }
         else if (codeContext.prefixType == PrefixType.NotNot) {
             out.value = !!out.value;
         }

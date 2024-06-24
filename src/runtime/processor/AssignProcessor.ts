@@ -40,6 +40,24 @@ class AssignSubProcessor extends SubProcessor {
                 else if (assignContext.assignType == TokenType.ModAssign) {
                     value %= StatementProcessor.process(assignContext.value, out).value;
                 }
+                else if (assignContext.assignType == TokenType.AssignBitwiseAnd) {
+                    value &= StatementProcessor.process(assignContext.value, out).value;
+                }
+                else if (assignContext.assignType == TokenType.AssignBitwiseOr) {
+                    value |= StatementProcessor.process(assignContext.value, out).value;
+                }
+                else if (assignContext.assignType == TokenType.AssignBitwiseXor) {
+                    value ^= StatementProcessor.process(assignContext.value, out).value;
+                }
+                else if (assignContext.assignType == TokenType.AssignBitwiseNot) {
+                    value = ~(StatementProcessor.process(assignContext.value, out).value);
+                }
+                else if (assignContext.assignType == TokenType.AssignShiftLeft) {
+                    value <<= StatementProcessor.process(assignContext.value, out).value;
+                }
+                else if (assignContext.assignType == TokenType.AssignShiftRight) {
+                    value >>= StatementProcessor.process(assignContext.value, out).value;
+                }
                 else {
                     throw new ProcessError(null, "AssignSubProcessor: processCore 无法处理的赋值类型"+ TokenType[assignContext.assignType]);
                 }
