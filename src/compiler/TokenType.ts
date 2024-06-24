@@ -555,4 +555,10 @@ export enum TokenType {
      * + 正数
      */
     Positive = 212,
+    
+
+    /**
+     * => 箭头函数
+     */
+    ArrowFunction = 300,
 }

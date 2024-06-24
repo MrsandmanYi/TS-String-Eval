@@ -352,6 +352,15 @@ export class OperatorLexer extends SubLexer{
                     return true;
                 }
             }
+            else if (nextChar === ">") {
+                out.type = "Operator";
+                out.text = "=>";
+                out.line = lineIndex;
+                out.startColumn = columnIndex;
+                out.endColumn = columnIndex + 1;
+                out.tokens = [new Token(TokenType.ArrowFunction, out.text, out.line, out.startColumn, out.endColumn)];
+                return true;
+            }
             else{
                 out.type = "Operator";
                 out.text = "=";

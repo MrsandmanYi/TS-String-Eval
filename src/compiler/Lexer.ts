@@ -6,6 +6,7 @@ import { OperatorLexer } from "./lexers/OperatorLexer";
 import { StringLexer } from "./lexers/StringLexer";
 import { LexerResult, SubLexer } from './lexers/SubLexer';
 import { SymbolLexer } from "./lexers/SymbolLexer";
+import { tokenFilterFunc } from "./lexers/TokenFilter";
 
 
 /**
@@ -93,6 +94,8 @@ export class Lexer {
             }
 
         }
+
+        this._tokens = tokenFilterFunc(this._tokens);
     }
 
 
