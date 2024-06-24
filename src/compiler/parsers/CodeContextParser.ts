@@ -33,9 +33,11 @@ class CodeContextSubParser extends SubParser {
         let prefixType: PrefixType = PrefixType.None;
         if (token.tokenType == TokenType.Not) {
             prefixType = PrefixType.Not;
+            token = this.readToken();
         }
         else if (token.tokenType == TokenType.NotNot) {
             prefixType = PrefixType.NotNot;
+            
         }
         else if (token.tokenType == TokenType.Sub) {
             prefixType = PrefixType.Negative;
@@ -98,8 +100,6 @@ class CodeContextSubParser extends SubParser {
             case TokenType.NaN:
             case TokenType.Null:
             case TokenType.Undefined:
-            case TokenType.True:
-            case TokenType.False:
             case TokenType.Number:
             case TokenType.String:
                 if (token.tokenType == TokenType.Number) {
@@ -111,8 +111,17 @@ class CodeContextSubParser extends SubParser {
                     codeContext = new BasicTypeContext(number, token);
                 }
                 else{
-                    codeContext = new BasicTypeContext(token.tokenText, token);
+                    if (token.tokenType == TokenType.Null || token.tokenType == TokenType.Undefined) {
+                        codeContext = new BasicTypeContext(null, token);
+                    }
+                    else{
+                        codeContext = new BasicTypeContext(token.tokenText, token);
+                    }
                 }
+                break;
+            case TokenType.True:
+            case TokenType.False:
+                codeContext = new BasicTypeContext(token.tokenType == TokenType.True, token);
                 break;
             case TokenType.New:
                 NewParser.parse(cmdBlock, result);
