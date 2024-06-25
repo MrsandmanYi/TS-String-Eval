@@ -2,6 +2,7 @@ import { CmdBlockType } from "../../command/CmdBlockType";
 import { Command } from "../../command/Command";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext } from "../../context/CodeContext";
+import { ENV_EDITOR } from "../../utils/Marco";
 import { RunTime } from "../Runtime";
 
 export class ProcessResult {
@@ -80,6 +81,13 @@ export abstract class SubProcessor {
     //#region 辅助方法
 
     protected getContextValue(pr: ProcessResult, key: string): any {
+
+        if (ENV_EDITOR) {
+            if (key.includes("__func__")) {
+                console.log("寻找匿名方法........: ", key);
+            }
+        }
+
         let data : ProcessResult | null = pr;
         while(data && !data.context.hasOwnProperty(key)){
             data = data.parent;     // 优先从当前上下文中查找
