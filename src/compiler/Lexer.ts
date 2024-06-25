@@ -51,6 +51,14 @@ export class Lexer {
         this._tokens = new Array<Token>();
 
         while (!this.isEndOfInput()) {
+            if (this._lines[this._lineIndex].includes("import") && 
+                this._lines[this._lineIndex].includes("from")) {
+                this._lineIndex++;
+                this._columnIndex = 0;
+                console.log("跳过 import from 行.......");
+                continue;
+            }
+
             if (this.isEndOfLine(this._columnIndex)) {
                 this._lineIndex++;
                 this._columnIndex = 0;
