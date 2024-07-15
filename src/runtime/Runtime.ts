@@ -30,8 +30,8 @@ export class RunTime {
         SyntaxParser.parse(params.tokens);
 
         RunTime.__classMap = SyntaxParser.classMap;
-        if (!RunTime.__global) {
-            RunTime.__global = {...RunTime.__global, ...params.global};
+        if (RunTime.__global) {
+            RunTime.__global = Object.assign(RunTime.__global, params.global);
         }
         else {
             RunTime.__global = params.global;
