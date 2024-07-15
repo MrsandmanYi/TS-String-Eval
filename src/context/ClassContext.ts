@@ -1,4 +1,5 @@
 import { Token } from "../compiler/Token";
+import { ENV_EDITOR } from "../utils/Marco";
 import { CodeContext, ContextType } from "./CodeContext";
 import { FunctionContext } from "./FunctionContext";
 import { VariableContext } from "./VariableContext";
@@ -62,6 +63,9 @@ export class ClassContext extends CodeContext {
     }
 
     public print() {
+        if (!ENV_EDITOR) {
+            return;
+        }
         // 打印出类的信息，包括类名，父类，成员变量，成员方法
         console.log("Class: " + this.className);
         console.log("Parent: " + (!!this.parentClassName? this.parentClassName : "null"));

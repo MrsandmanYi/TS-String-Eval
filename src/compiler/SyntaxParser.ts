@@ -1,4 +1,5 @@
 import { ClassContext } from "../context/ClassContext";
+import { Logger } from "../utils/Logger";
 import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 import { ParserResult } from "./parsers/SubParser";
@@ -44,15 +45,15 @@ export class SyntaxParser {
         }
 
         SyntaxParser.classMap.forEach((value, key) => {
-            console.log(`类名: ${key}`, value);
+            Logger.log(`类名: ${key}`, value);
             if (value.parentClassName) {
                 let parentClass = SyntaxParser.classMap.get(value.parentClassName);
                 if (parentClass) {
-                     console.log(`父类: ${parentClass.className}`);
+                    Logger.log(`父类: ${parentClass.className}`);
                      value.parentClass = parentClass;
                 }
                 else {
-                    console.error(`父类 ${value.parentClassName} 不存在`);
+                    Logger.error(`父类 ${value.parentClassName} 不存在`);
                 }
             }
             value.print();
