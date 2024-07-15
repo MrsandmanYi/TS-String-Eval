@@ -2,7 +2,7 @@ import { CmdBlockType } from "../../command/CmdBlockType";
 import { FunctionContext } from "../../context/FunctionContext";
 import { CommandProcessor } from "./CommandProcessor";
 import { ProcessResult, SubProcessor } from "./SubProcessor";
-
+import { StatementProcessor } from "./StatementProcessor";
 
 class FunctionSubProcessor extends SubProcessor {
 
@@ -28,8 +28,14 @@ class FunctionSubProcessor extends SubProcessor {
             function tempFunc(this: any) {
                 self.currentThisPtr = this;
                 for(let i = 0; i < params.length; i++) {
-                    // @ts-ignore
-                    tempFunc[params[i]] = arguments[i] || this.StatementProcessor.process(values[i], out).value;
+                    if (arguments.length < i + 1) {
+                        // @ts-ignore
+                        tempFunc[params[i]] = null;
+                    }
+                    else{
+                        // @ts-ignore
+                        tempFunc[params[i]] = arguments[i] || StatementProcessor.process(values[i], out).value;
+                    }
                 }
 
                 let result = new ProcessResult();
