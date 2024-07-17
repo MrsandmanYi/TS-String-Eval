@@ -88,12 +88,15 @@ class GetVariableSubProcessor extends SubProcessor {
             }
             else {
                 let value = this.getMemberValue(member, out);
-                result = this.getContextValue(out, value);
+                result = this.getContextValue(out, value, true);
                 if (result == undefined) {
                     if(!this.currentClass){
                         throw new ProcessError(member, "GetVariableProcessor: processCore 无法获取变量");
                     }
                     result = this.__global[this.currentClass.className] || this.__global[value];
+                }
+                else if (result.isNull) {
+                    result = null;
                 }
             }
         }

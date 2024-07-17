@@ -80,7 +80,7 @@ export abstract class SubProcessor {
 
     //#region 辅助方法
 
-    protected getContextValue(pr: ProcessResult, key: string): any {
+    protected getContextValue(pr: ProcessResult, key: string, processNull: boolean = false): any {
 
         if (ENV_EDITOR) {
             if (key.includes("__func__")) {
@@ -94,6 +94,16 @@ export abstract class SubProcessor {
         }
 
         if(data){
+            if (processNull) {
+                if (data.context.hasOwnProperty(key)) {
+                    if (data.context[key] == null) {
+                        return {
+                            isNull: true,
+                        }
+                    }
+                }
+            }
+
             return data.context[key];
         }
         else if (this.currentThisPtr && this.currentThisPtr.hasOwnProperty(key)){
