@@ -2,6 +2,8 @@ import { CodeContext, ContextType } from "../../context/CodeContext";
 import { FunctionContext } from '../../context/FunctionContext';
 import { InvokeFuncType, InvokeFunctionContext } from "../../context/InvokeFunctionContext";
 import { MemberContext } from "../../context/MemberContext";
+import { Logger } from "../../utils/Logger";
+import { ENV_EDITOR } from "../../utils/Marco";
 import { ProcessError } from "../base/ProcessError";
 import { StatementProcessor } from "./StatementProcessor";
 import { ProcessResult, SubProcessor } from "./SubProcessor";
@@ -51,6 +53,9 @@ class InvokeSubProcessor extends SubProcessor {
             }
 
             if (!func) {
+                if (ENV_EDITOR) {
+                    Logger.error("invokeFuncContext: ",JSON.stringify(invokeFuncContext))                    
+                }
                 throw new ProcessError(null, "InvokeSubProcessor: processCore 无法获取函数 2");
             }
 
@@ -85,6 +90,7 @@ class InvokeSubProcessor extends SubProcessor {
                     }
                 }
                 else {
+                    // 拿不到this,则是静态方法
                     this.currentThisPtr = this.__global;
                 }
                 let result = !isSuper ? func?.apply(this.currentThisPtr, params) : func?.apply(recordThisPtr, params);

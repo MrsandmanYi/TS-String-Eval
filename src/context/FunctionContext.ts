@@ -33,6 +33,9 @@ export class FunctionContext extends CodeContext {
 
     public autoTriggerParams: Array<CodeContext|undefined> = [];
 
+    public isParamFunc: boolean = false;    // 是否是参数函数
+    public thisMember: MemberContext | null = null; // 所属成员
+
     public constructor(name: string, isStatic: boolean, params: string[], types: Array<MemberContext|undefined>,
          values: Array<CodeContext|undefined>, hasDynamicParams: boolean, cmdBlock: CmdBlock, token: Token | null = null) {
         super(token);
