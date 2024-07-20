@@ -57,6 +57,11 @@ export abstract class SubProcessor {
         return RunTime.currentThisPtr;
     }
     public set currentThisPtr(value: any | null) {
+        // if (value == null) {
+        //     // 打印出堆栈信息
+        //     console.log("currentThisPtr: ", value);
+        //     console.trace();
+        // }
         RunTime.currentThisPtr = value;
     }
 

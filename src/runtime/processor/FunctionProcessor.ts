@@ -26,7 +26,10 @@ class FunctionSubProcessor extends SubProcessor {
             let __this = selfObject;
 
             function tempFunc(this: any) {
-                self.currentThisPtr = this;
+                // if (this == null) {
+                //     console.log("tempFunc this is null");   
+                // }
+                self.currentThisPtr = this || self.currentThisPtr;
                 for(let i = 0; i < params.length; i++) {
                     if (arguments.length < i + 1) {
                         // @ts-ignore
@@ -35,6 +38,7 @@ class FunctionSubProcessor extends SubProcessor {
                     else{
                         // @ts-ignore
                         tempFunc[params[i]] = arguments[i] || StatementProcessor.process(values[i], out).value;
+                        
                     }
                 }
 
