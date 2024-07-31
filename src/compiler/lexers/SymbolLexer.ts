@@ -50,7 +50,26 @@ export class SymbolLexer extends SubLexer {
                 }
                 break;
             case "?":
-                tokenType = TokenType.Question;
+                let nextChar2 = columnIndex + 1 < line.length ? line[columnIndex + 1] : "";
+                if (nextChar2 === ".") {
+                    columnIndex++;
+                    char = ".";
+                    tokenType = TokenType.Dot;      // ?. 语法糖，当做 . 处理
+                }
+                else {
+                    tokenType = TokenType.Question;
+                }
+                break;
+            case "!":
+                let nextChar3 = columnIndex + 1 < line.length ? line[columnIndex + 1] : "";
+                if (nextChar3 === ".") {
+                    columnIndex++;
+                    char = ".";
+                    tokenType = TokenType.Dot;    // !. 语法糖，当做 . 处理
+                }
+                else {
+                    tokenType = TokenType.None;
+                }
                 break;
             case ":":
                 tokenType = TokenType.Colon;
