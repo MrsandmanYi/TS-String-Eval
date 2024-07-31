@@ -10,34 +10,29 @@ export class HotUpdateClass{
 
     public hotUpdateFuncPlus(params: number){
         console.log("hot update func plus: " + params);
+        //@ts-ignore
+        this.addhotUpdateFunc();
+
+        HotUpdateClass.staticHotUpdateFunc();
+    }
+
+    static staticHotUpdateFunc(){
+        console.log("static func");
     }
 }
 
-export class ExtendHotUpdateClass extends HotUpdateClass{
-    public hotUpdateFunc(){
-        console.log("extend hot update func");
-    }
-
-    public hotUpdateFuncPlus(params: number){
-        console.log("extend hot update func plus: " + params);
-    }
-}
 
 const lexer = new Lexer(`
 class Start {
     constructor() { 
-        HotUpdateClass.prototype.hotUpdateFunc = function(){
+        HotUpdateClass.prototype.addhotUpdateFunc = function(){
             console.log("......new hot update func");
             console.log("va: " + this.va);
         };
 
-        HotUpdateClass.prototype.hotUpdateFuncPlus = function(params){
-            console.log("......new hot update func plus: " + params);
-        };
-
-        ExtendHotUpdateClass.prototype.hotUpdateFuncPlus = function(params){
-            console.log("......new extend hot update func plus: " + params);
-        };
+        HotUpdateClass.staticHotUpdateFunc = function(){
+            console.log("......static hot update func");
+        }
     }
 }
 `);
@@ -52,11 +47,9 @@ RunTime.run({
     global: {
         console: console,
         HotUpdateClass: HotUpdateClass,
-        ExtendHotUpdateClass: ExtendHotUpdateClass
     }
 });
 
 new HotUpdateClass().hotUpdateFunc();
 new HotUpdateClass().hotUpdateFuncPlus(99999999);
-
-new ExtendHotUpdateClass().hotUpdateFuncPlus(88888888);
+//HotUpdateClass.staticHotUpdateFunc();
