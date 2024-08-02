@@ -91,9 +91,15 @@ class OperateSubProcessor extends SubProcessor {
                     out.value = leftValue && rightValue;
                     break;
                 case TokenType.Or:
-                    rightValue = StatementProcessor.process(opContext.right, out).value;
-                    out.value = leftValue || rightValue;
-                    break;
+                    if (leftValue) {
+                        out.value = true;
+                        break;
+                    }
+                    else {
+                        rightValue = StatementProcessor.process(opContext.right, out).value;
+                        out.value = leftValue || rightValue;
+                        break;
+                    }
                 case TokenType.Equal:
                     rightValue = StatementProcessor.process(opContext.right, out).value;
                     out.value = leftValue == rightValue;
