@@ -102,7 +102,7 @@ class GetVariableSubProcessor extends SubProcessor {
         }
 
         // 处理自增、自减运算符
-        if (member.mutator != MemberMutator.None) {
+        if (member.mutator != undefined && member.mutator != MemberMutator.None) {
             if (result == undefined) {
                 throw new ProcessError(member, "GetVariableProcessor: processCore 无法获取变量");
             }
