@@ -96,7 +96,7 @@ class SetVariableSubProcessor extends SubProcessor {
             while (result && result.context[key] == undefined) {
                 if (result.parent) {
                     result = result.parent;
-                    if (result.context[key] != undefined) {
+                    if (result.context[key] !== undefined) {
                         result.context[key] = variableValue;
                         hasSet = true;
                         break;
