@@ -118,7 +118,7 @@ class ForSubParser extends SubParser {
         let forInCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.ForIn, cmdBlock);
 
         this.readExpectedToken(TokenType.LeftParen);
-        this.readExpectedToken(TokenType.Var);
+        this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);
 
         forInContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
         if (this.peekToken()?.tokenType == TokenType.Colon) {
@@ -141,7 +141,7 @@ class ForSubParser extends SubParser {
         let forOfCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.ForOf, cmdBlock);
 
         this.readExpectedToken(TokenType.LeftParen);
-        this.readExpectedToken(TokenType.Var);
+        this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);
 
         forOfContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
         if (this.peekToken()?.tokenType == TokenType.Colon) {

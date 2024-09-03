@@ -163,6 +163,14 @@ export abstract class SubParser {
         throw new ParserError(token, "读取到的 token 类型与预期不符：" + TokenType[tokenType] + " != " + (token ? TokenType[token.tokenType] : "null"));
     }
 
+    protected readExpectedTokensOr(tokenTypes: TokenType[]) : Token {
+        let token = this.readToken();
+        if (token && tokenTypes.indexOf(token.tokenType) >= 0) {
+            return token;
+        }
+        throw new ParserError(token, "读取到的 token 类型与预期不符：" + tokenTypes.join(",") + " != " + (token ? TokenType[token.tokenType] : "null"));
+    }
+
     /**
      * peek 一个 token, 并检查其类型是否符合预期
      */
