@@ -139,6 +139,12 @@ class CodeContextSubParser extends SubParser {
                 DeleteParser.parse(cmdBlock, result);
                 codeContext = result.codeContext;
                 break;
+            case TokenType.Negative:
+                codeContext = new BasicTypeContext(token.tokenText, token);
+                break;
+            case TokenType.Positive:
+                codeContext = new BasicTypeContext(token.tokenText.substring(1), token);
+                break;
             default:
                 throw new ParserError(token, "getCodeContext 起始关键字错误 ");
         }
