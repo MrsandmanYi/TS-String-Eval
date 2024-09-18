@@ -132,6 +132,13 @@ export abstract class SubParser {
         throw new ParserError(null, "peekToken 无法 peek token");
     }
 
+    protected peekTokenNext(next: number = 1) : Token | null {
+        if (this.currentTokenIndex + next < this._tokens.length) {
+            return this._tokens[this.currentTokenIndex + next];
+        }
+        return null;
+    } 
+
     /**
      * 回滚 token 索引
      */

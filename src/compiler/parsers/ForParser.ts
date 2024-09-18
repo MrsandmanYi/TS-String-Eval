@@ -19,26 +19,39 @@ class ForSubParser extends SubParser {
     
     protected parseCore(out: ParserResult): void {
         let cmdBlock = this.cmdBlock;
-        this.skipToken(3);
+        let next2Token = this.peekTokenNext(1);
+        //console.error("ForSubParser:parseCore -> nextToken", next2Token);
+        let skipCount = 3;
+        let omitVar = false;    // 是否省略了 var/const/let 关键字
+        if (next2Token && next2Token.tokenType == TokenType.Identifier) {
+            skipCount = 2;
+            omitVar = true;
+        }
+
+        this.skipToken(skipCount);
         let token = this.peekToken();
         if (!token) throw new Error("ForParser: 语法错误");
         if (token.tokenType == TokenType.In) {
             // for in 语句 for(let s in arr) {}
-            this.backToken(3);
-            this.parseForIn(out, cmdBlock);
+            this.backToken(skipCount);
+            this.parseForIn(out, cmdBlock, omitVar);
         }
         else if (token.tokenType == TokenType.Of) {
             // for of 语句 for(let s of arr) {}
-            this.backToken(3);
-            this.parseForOf(out, cmdBlock);
+            this.backToken(skipCount);
+            this.parseForOf(out, cmdBlock, omitVar);
         }
         else {
-            this.backToken(3);
+            this.backToken(skipCount);
             this.readExpectedToken(TokenType.LeftParen);
             let tokenIndex = this.currentTokenIndex;
-            let token = this.readToken();
-            if (!token) throw new Error("ForParser: 语法错误");
-            if (token.tokenType == TokenType.Identifier) {
+            let token = null;
+            if (!omitVar) {
+                token = this.readToken();    
+                if (!token) throw new Error("ForParser: 语法错误");            
+            }
+
+            if (token && token.tokenType == TokenType.Identifier) {
                 let assignToken = this.readToken();
                 if (assignToken?.tokenType == TokenType.Assign) {
                     let context = this.getCompoundCodeContext(true, cmdBlock);
@@ -113,12 +126,14 @@ class ForSubParser extends SubParser {
     }
 
 
-    private parseForIn(out: ParserResult, cmdBlock: CmdBlock | null) {
+    private parseForIn(out: ParserResult, cmdBlock: CmdBlock | null, omitVar: boolean) {
         let forInContext: ForInContext = new ForInContext(this.peekToken());
         let forInCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.ForIn, cmdBlock);
 
         this.readExpectedToken(TokenType.LeftParen);
-        this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);
+        if (!omitVar) {
+            this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);            
+        }
 
         forInContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
         if (this.peekToken()?.tokenType == TokenType.Colon) {
@@ -136,12 +151,14 @@ class ForSubParser extends SubParser {
         cmdBlock?.addCommand(new Command(CommandType.ForIn_CMD, forInContext, this.peekToken()));
     }
 
-    private parseForOf(out: ParserResult, cmdBlock: CmdBlock | null) {
+    private parseForOf(out: ParserResult, cmdBlock: CmdBlock | null, omitVar: boolean) {
         let forOfContext: ForOfContext = new ForOfContext(this.peekToken());
         let forOfCmdBlock: CmdBlock = new CmdBlock(CmdBlockType.ForOf, cmdBlock);
 
         this.readExpectedToken(TokenType.LeftParen);
-        this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);
+        if (!omitVar) {
+            this.readExpectedTokensOr([TokenType.Var, TokenType.Const]);
+        }
 
         forOfContext.identifier = this.readExpectedToken(TokenType.Identifier).tokenText;
         if (this.peekToken()?.tokenType == TokenType.Colon) {
