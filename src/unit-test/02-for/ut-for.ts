@@ -22,7 +22,7 @@ class Start {
         }
 
         let arr = [1,3,5,7,2,6];
-        for(let i in arr){
+        for(const i in arr){
             console.log("for in: ",i, arr[i]);
         }
 

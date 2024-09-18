@@ -19,7 +19,11 @@
             //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-function.ts",
             //"program": "${workspaceFolder}\\src\\unit-test\\07-array\\ut-array.ts",
             //"program": "${workspaceFolder}\\src\\unit-test\\08-ifelse\\ut-ifelse.ts",
-            "program": "${workspaceFolder}\\src\\unit-test\\10-while\\ut-while.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\10-while\\ut-while.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-complex-func.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-continuous-call.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\bug\\nullVariable.ts",
+            "program": "${workspaceFolder}\\src\\unit-test\\bug\\negtiveNumber.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
