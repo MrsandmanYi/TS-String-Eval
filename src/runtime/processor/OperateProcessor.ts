@@ -125,15 +125,15 @@ class OperateSubProcessor extends SubProcessor {
                 case TokenType.Less:
                     rightValue = StatementProcessor.process(opContext.right, out).value;
                     if(typeof(leftValue) != "number" || typeof(rightValue) != "number"){
-                        throw new Error("OperateSubProcessor: < 操作符只能用于数字比较");
+                        throw new Error("OperateSubProcessor: < 操作符只能用于数字比较" + leftValue + " " + rightValue);
                     }
                     out.value = leftValue < rightValue;
                     break;
                 case TokenType.LessEqual:
-                    if(typeof(leftValue) != "number" || typeof(rightValue) != "number"){
-                        throw new Error("OperateSubProcessor: <= 操作符只能用于数字比较");
-                    }
                     rightValue = StatementProcessor.process(opContext.right, out).value;
+                    if(typeof(leftValue) != "number" || typeof(rightValue) != "number"){
+                        throw new Error("OperateSubProcessor: <= 操作符只能用于数字比较" + leftValue + " " + rightValue);
+                    }
                     out.value = leftValue <= rightValue;
                     break;
             }

@@ -1,3 +1,4 @@
+import { BasicTypeContext } from "../../context/BasicTypeContext";
 import { ClassContext } from "../../context/ClassContext";
 import { CodeContext, ContextType, PrefixType } from "../../context/CodeContext";
 import { TypeofContext } from "../../context/TypeofContext";
@@ -52,7 +53,7 @@ class StatementSubProcessor extends SubProcessor {
                 out.value = typeof(this.processPrefix((codeContext as TypeofContext).value, out));
                 break;
             case ContextType.BasicType:
-                out.value = (codeContext as TypeofContext).value;
+                out.value = (codeContext as BasicTypeContext).value;
                 break;
             case ContextType.Delete:
                 DeleteProcessor.process(codeContext, out);
