@@ -140,10 +140,12 @@ class CodeContextSubParser extends SubParser {
                 codeContext = result.codeContext;
                 break;
             case TokenType.Negative:
-                codeContext = new BasicTypeContext(token.tokenText, token);
+                const number = Number(token.tokenText);
+                codeContext = new BasicTypeContext(number, token);
                 break;
             case TokenType.Positive:
-                codeContext = new BasicTypeContext(token.tokenText.substring(1), token);
+                const number2 = Number(token.tokenText.substring(1));
+                codeContext = new BasicTypeContext(number2, token);
                 break;
             default:
                 throw new ParserError(token, "getCodeContext 起始关键字错误 ");
