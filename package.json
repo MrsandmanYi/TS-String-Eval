@@ -1,15 +1,20 @@
-{ 
-    "name": "TS-String-Eval", 
-    "version": "1.0.0", 
-    "description": "", 
-    "main": "index.js", 
-    "scripts": { 
-        "build": "tsc -b", 
-        "start": "node dist/index.js", 
-        "bs" : "tsc -b && node dist/index.js", 
-        "test": "echo \"Error: no test specified\" && exit 1" 
-    }, 
-    "keywords": [], 
-    "author": "yiyao", 
-    "license": "ISC" 
-} 
+{
+    "name": "TS-String-Eval",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc -b",
+        "start": "node dist/index.js",
+        "bs": "tsc -b && node dist/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "yiyao",
+    "license": "ISC",
+    "devDependencies": {
+        "@jest/globals": "^29.7.0",
+        "@types/jest": "^29.5.13",
+        "ts-jest": "^29.2.5"
+    }
+}

@@ -56,7 +56,7 @@ class InvokeSubProcessor extends SubProcessor {
                 if (ENV_EDITOR) {
                     Logger.error("invokeFuncContext: ",JSON.stringify(invokeFuncContext))                    
                 }
-                throw new ProcessError(null, "InvokeSubProcessor: processCore 无法获取函数 2");
+                throw new ProcessError(null, "InvokeSubProcessor: processCore 无法获取函数 2 :" + invokeContext.token?.toString());
             }
 
             if (invokeFuncContext.invokeFuncType != InvokeFuncType.New) {

@@ -7,6 +7,15 @@ class Start {
 
     constructor() { 
         console.log(".......constructor unit test.......");
+        let self = this;
+        let test = () => {
+            console.log(self.sum(1,2));
+        }
+        test();
+    }
+
+    sum(a : number, b : number) : number {
+        return a + b;
     }
 }
 `);

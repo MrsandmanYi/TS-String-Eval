@@ -46,4 +46,14 @@ export class Token {
         this._endColumn = endColumn;
     }
 
+    toString(): string {
+        return `
+        --Token: ${this.tokenText}
+        --TokenType: ${this.tokenName}
+        --Line: ${this.line}
+        --StartColumn: ${this.startColumn}
+        --EndColumn: ${this.endColumn}
+        `;
+    }
+
 }

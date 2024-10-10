@@ -111,7 +111,7 @@ export abstract class SubProcessor {
 
             return data.context[key];
         }
-        else if (this.currentThisPtr && this.currentThisPtr.hasOwnProperty(key)){
+        else if (this.currentThisPtr && this.currentThisPtr.hasOwnProperty && this.currentThisPtr.hasOwnProperty(key)){
             return this.currentThisPtr[key];        // 从当前对象中查找
         }
         else{
