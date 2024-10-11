@@ -36,9 +36,16 @@ class FunctionSubProcessor extends SubProcessor {
                         tempFunc[params[i]] = null;
                     }
                     else{
-                        // @ts-ignore
-                        tempFunc[params[i]] = arguments[i] || StatementProcessor.process(values[i], out).value;
-                        
+
+                        let arg = arguments[i];
+                        if (arg === 0) {
+                            // @ts-ignore
+                            tempFunc[params[i]] = 0;
+                        }
+                        else {
+                            // @ts-ignore
+                            tempFunc[params[i]] = arguments[i] || StatementProcessor.process(values[i], out).value;
+                        }
                     }
                 }
 

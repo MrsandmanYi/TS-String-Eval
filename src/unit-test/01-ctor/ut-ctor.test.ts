@@ -11,12 +11,16 @@ class Start {
     }
 
     constructor() { 
-        // console.log(".......constructor unit test.......");
+        this.jestTest('adds 1 + -1 to equal 0', this.sum, 0);
+    }
+
+    jestTest(desc, func, result) {
         let self = this;
+        let r = result;
         let test = () => {
-            jest.expect(self.sum(1,2)).toBe(3);
+            jest.expect(func()).toBe(r);
         }
-        jest.test('adds 1 + 2 to equal 3', test);
+        jest.test(desc, test);
     }
 }
 `);
