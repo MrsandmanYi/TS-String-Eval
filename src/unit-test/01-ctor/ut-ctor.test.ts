@@ -11,17 +11,13 @@ class Start {
     }
 
     constructor() { 
-        this.jestTest('adds 1 + -1 to equal 0', this.sum, 0);
+        let self = this;
+        
+        jest.test('adds 1 + 2 to equal 3', () => {
+            jest.expect(self.sum(1, 2)).toBe(3);
+        });
     }
 
-    jestTest(desc, func, result) {
-        let self = this;
-        let r = result;
-        let test = () => {
-            jest.expect(func()).toBe(r);
-        }
-        jest.test(desc, test);
-    }
 }
 `);
 
