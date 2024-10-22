@@ -49,7 +49,13 @@ class ConditionSubProcessor extends SubProcessor {
         out.isBreak = result.isBreak;
         out.isContinue = result.isContinue;
         out.isOver = result.isOver;
-        out.value = true;
+
+        if (out.isOver) {
+            out.value = result.value;            
+        }
+        else {
+            out.value = true;
+        }
         return out;
     }
 }

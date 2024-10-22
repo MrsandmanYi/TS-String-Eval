@@ -23,7 +23,8 @@
             //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-complex-func.ts",
             //"program": "${workspaceFolder}\\src\\unit-test\\06-function\\ut-continuous-call.ts",
             //"program": "${workspaceFolder}\\src\\unit-test\\bug\\nullVariable.ts",
-            "program": "${workspaceFolder}\\src\\unit-test\\bug\\negtiveNumber.ts",
+            //"program": "${workspaceFolder}\\src\\unit-test\\bug\\negtiveNumber.ts",
+            "program": "${workspaceFolder}\\src\\unit-test\\bug\\returnError.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
